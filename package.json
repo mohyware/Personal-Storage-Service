@@ -1,0 +1,21 @@
+{
+  "name": "personal-storage-service",
+  "version": "1.0.0",
+  "description": "A personal storage service built with Express and Prisma, featuring session-based authentication, folder and file management, and cloud storage integration. This project is part of The Odin Project curriculum.",
+  "main": "src/index.js",
+  "nodemonConfig": {
+    "delay": "100"
+  },
+  "scripts": {
+    "start": "node src/index.js",
+    "start-dev": "nodemon src/index.js"
+    },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "express": "^4.21.0",
+    "nodemon": "^3.1.7"
+  }
+}

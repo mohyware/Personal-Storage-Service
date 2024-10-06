@@ -1,5 +1,7 @@
 const express = require('express')
 require("dotenv").config();
+const prisma = require('./db/prisma')
+
 
 const app = express()
 const port = process.env.PORT;

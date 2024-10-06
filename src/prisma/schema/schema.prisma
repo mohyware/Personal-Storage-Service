@@ -1,0 +1,70 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  password  String
+  files     File[]
+  folders   Folder[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model File {
+  id        Int         @id @default(autoincrement())
+  name      String
+  size      Int //  in bytes
+  mimeType  String // Type of the file (e.g., image/jpeg, application/pdf)
+  url       String // URL or path where the file is stored
+  user      User        @relation(fields: [userId], references: [id])
+  userId    Int // Foreign key to User model
+  folder    Folder?     @relation(fields: [folderId], references: [id])
+  folderId  Int? // Optional foreign key to Folder
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+  ShareLink ShareLink[]
+}
+
+model Folder {
+  id             Int         @id @default(autoincrement())
+  name           String
+  user           User        @relation(fields: [userId], references: [id])
+  userId         Int
+  files          File[]
+  parentFolder   Folder?     @relation("FolderToFolder", fields: [parentFolderId], references: [id])
+  parentFolderId Int?
+  subFolders     Folder[]    @relation("FolderToFolder")
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+  ShareLink      ShareLink[]
+}
+
+model ShareLink {
+  id         Int       @id @default(autoincrement())
+  token      String    @unique // Unique token for accessing the share link
+  type       ShareType // Enum to differentiate between file and folder
+  file       File?     @relation(fields: [fileId], references: [id])
+  fileId     Int?
+  folder     Folder?   @relation(fields: [folderId], references: [id])
+  folderId   Int?
+  expiration DateTime? // Optional expiration date for the share link
+  createdAt  DateTime  @default(now())
+}
+
+enum ShareType {
+  FILE
+  FOLDER
+}

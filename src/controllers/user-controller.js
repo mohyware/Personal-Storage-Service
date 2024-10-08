@@ -1,46 +1,54 @@
-const prisma = require("./src/db/prisma")
+const prisma = require("../config/prisma-client")
 const { StatusCodes } = require('http-status-codes')
 const { BadRequestError, UnauthenticatedError } = require('../errors')
+const { hashPassword } = require('../utils/password-utils');
+
 const User = prisma.user;
 
 
 const getUser = async (req, res) => {
     const {
-        user: { userId }
+        user: { id: userId }
     } = req
-    const user = await User.findByPk(userId);
+
+    const user = await User.findUnique({ where: { id: userId } });
     res.status(StatusCodes.OK).json({ user })
 }
 
 const deleteUser = async (req, res) => {
     const {
-        user: { userId }
+        user: { id: userId }
     } = req
-    const user = await User.destroy({ where: { id: userId } });
+    await User.delete({ where: { id: userId } });
     res.status(StatusCodes.OK).json({ message: "User deleted successfully" })
 
 }
 const updateUser = async (req, res, next) => {
     const {
-        user: { userId }
+        user: { id: userId },
+        body: { email, userName, password }
     } = req
     try {
-        const user = await User.findByPk(userId);
-
-        if (user.role !== 'Admin' && req.body.role === 'Admin') {
-            throw new UnauthorizedError('Cant Modifying role. Admins only.');
+        if (!email && !userName && !password) {
+            throw new BadRequestError('You must provide a value for any field to proceed with the update')
         }
-
-        await user.update({ ...req.body });
+        //const user = await User.findUnique({ where: { id: userId } });
+        const hashedPassword = await hashPassword(password);
+        const user = await User.update({
+            where: { id: userId },
+            data: {
+                email: email,
+                userName: userName,
+                password: hashedPassword,
+                updatedAt: Date.now()
+            },
+        });
 
         res.status(StatusCodes.OK).json({ message: "User updated successfully", user });
     } catch (error) {
         next(error);
     }
-};
 
-const logout = (req, res) => {
-    res.status(StatusCodes.OK).json({ message: "Logged out successfully" });
 };
 
 module.exports = {

@@ -32,7 +32,6 @@ const updateUser = async (req, res, next) => {
         if (!email && !userName && !password) {
             throw new BadRequestError('You must provide a value for any field to proceed with the update')
         }
-        //const user = await User.findUnique({ where: { id: userId } });
         const hashedPassword = await hashPassword(password);
         const user = await User.update({
             where: { id: userId },
@@ -43,7 +42,6 @@ const updateUser = async (req, res, next) => {
                 updatedAt: Date.now()
             },
         });
-
         res.status(StatusCodes.OK).json({ message: "User updated successfully", user });
     } catch (error) {
         next(error);

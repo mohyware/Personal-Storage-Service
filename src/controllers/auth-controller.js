@@ -20,23 +20,26 @@ const register = async (req, res) => {
     res.status(StatusCodes.CREATED).json({ user: { userName: user.userName }, token })
 }
 
-const login = async (req, res) => {
+const login = async (req, res, next) => {
     const { email, password } = req.body
+    try {
+        if (!email || !password) {
+            throw new BadRequestError('Please provide email and password')
+        }
+        const user = await User.findUnique({ where: { email: email } })
+        if (!user) {
+            throw new UnauthenticatedError('Invalid Credentials')
+        }
 
-    if (!email || !password) {
-        throw new BadRequestError('Please provide email and password')
+        const isPasswordCorrect = await comparePassword(password, user.password);
+        if (!isPasswordCorrect) {
+            throw new UnauthenticatedError('Invalid Credentials')
+        }
+        const token = createJWT(user)
+        res.status(StatusCodes.OK).json({ user: { userName: user.userName }, token })
+    } catch (error) {
+        next(error);
     }
-    const user = await User.findUnique({ where: { email: email } })
-    if (!user) {
-        throw new UnauthenticatedError('Invalid Credentials')
-    }
-
-    const isPasswordCorrect = await comparePassword(password, user.password);
-    if (!isPasswordCorrect) {
-        throw new UnauthenticatedError('Invalid Credentials')
-    }
-    const token = createJWT(user)
-    res.status(StatusCodes.OK).json({ user: { userName: user.userName }, token })
 }
 
 const logout = (req, res) => {

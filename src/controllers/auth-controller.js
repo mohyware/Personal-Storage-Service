@@ -41,7 +41,6 @@ const login = async (req, res, next) => {
             secure: process.env.NODE_ENV === 'production',
             maxAge: 60 * 1000,
         });
-        return res.status(StatusCodes.OK).redirect('/access.html');
         res.status(StatusCodes.OK).json({ user: { userName: user.userName }, token })
     } catch (error) {
         next(error);

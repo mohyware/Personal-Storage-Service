@@ -6,18 +6,22 @@ const { hashPassword, comparePassword } = require('../utils/password-utils');
 
 const User = prisma.user;
 
-const register = async (req, res) => {
+const register = async (req, res, next) => {
     const { email, userName, password } = req.body
-    const hashedPassword = await hashPassword(password);
-    const user = await User.create({
-        data: {
-            email: email,
-            userName: userName,
-            password: hashedPassword,
-        },
-    })
-    const token = createJWT(user)
-    res.status(StatusCodes.CREATED).json({ user: { userName: user.userName }, token })
+    try {
+        const hashedPassword = await hashPassword(password);
+        const user = await User.create({
+            data: {
+                email: email,
+                userName: userName,
+                password: hashedPassword,
+            },
+        })
+        const token = createJWT(user)
+        res.status(StatusCodes.CREATED).json({ user: { userName: user.userName }, token })
+    } catch (err) {
+        next(err);
+    }
 }
 
 const login = async (req, res, next) => {
@@ -37,7 +41,7 @@ const login = async (req, res, next) => {
         }
         const token = createJWT(user)
         res.cookie('jwt', token, {
-            httpOnly: true,
+            httpOnly: false,
             secure: process.env.NODE_ENV === 'production',
             maxAge: 60 * 1000,
         });
@@ -46,10 +50,14 @@ const login = async (req, res, next) => {
         next(error);
     }
 }
+const getStatus = (req, res) => {
+    res.json({ isAuthenticated: true });
+
+};
 
 const logout = (req, res) => {
     res.clearCookie('token', {
-        httpOnly: true,
+        httpOnly: false,
         //secure: true,
         sameSite: 'Strict',
     });
@@ -59,5 +67,6 @@ const logout = (req, res) => {
 module.exports = {
     register,
     login,
+    getStatus,
     logout
 }

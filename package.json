@@ -4,6 +4,7 @@
   "description": "A personal storage service built with Express and Prisma, featuring session-based authentication, folder and file management, and cloud storage integration. This project is part of The Odin Project curriculum.",
   "main": "src/index.js",
   "nodemonConfig": {
+    "ext": "js,json,hbs,html,css",
     "delay": "100"
   },
   "scripts": {
@@ -16,9 +17,12 @@
   "dependencies": {
     "@prisma/client": "^5.20.0",
     "bcrypt": "^5.1.1",
+    "cookie-parser": "^1.4.7",
     "dotenv": "^16.4.5",
     "express": "^4.21.0",
+    "express-rate-limit": "^7.4.1",
     "http-status-codes": "^2.3.0",
+    "jsonwebtoken": "^9.0.2",
     "nodemon": "^3.1.7",
     "passport": "^0.7.0",
     "passport-jwt": "^4.0.1"

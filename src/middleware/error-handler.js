@@ -1,4 +1,5 @@
 const { StatusCodes } = require('http-status-codes')
+const Prisma = require('@prisma/client')
 
 const errorHandlerMiddleware = (err, req, res, next) => {
   let customError = {
@@ -7,16 +8,10 @@ const errorHandlerMiddleware = (err, req, res, next) => {
     msg: err.message || 'Something went wrong try again later',
   }
 
-  /*   if (err instanceof Sequelize.ValidationError) {
-      customError.msg = err.errors
-        .map((item) => item.message)
-        .join(', ');
-      customError.statusCode = 400
-    } */
-  /*   if (err.name === 'SequelizeUniqueConstraintError') {
-      customError.msg = `Duplicate value entered for ${err.errors[0].path} field, please choose another value.`;
-      customError.statusCode = 400;
-    } */
+  if (err instanceof Prisma.PrismaClientKnownRequestError && err.code === 'P2002') {
+    return res.status(StatusCodes.CONFLICT).json({ msg: 'This email is already registered.' })
+  }
+
   if (err.name === 'CastError') {
     customError.msg = `No item found with id : ${err.value}`
     customError.statusCode = 404

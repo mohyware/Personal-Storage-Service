@@ -1,10 +1,14 @@
 require("dotenv").config();
 const express = require('express')
 const app = express()
+const cookieParser = require('cookie-parser');
+
+app.use(express.static('./src/views'))
 // middleware
 const auth = require('./middleware/auth')
 const errorHandlerMiddleware = require('./middleware/error-handler')
 const notFoundMiddleware = require('./middleware/not-found')
+
 // routes
 const authRouter = require('./routes/auth-route')
 const userRouter = require('./routes/user-route')
@@ -14,6 +18,7 @@ var passport = require("passport");
 initializePassport(passport)
 app.use(passport.initialize());
 
+app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 // routes

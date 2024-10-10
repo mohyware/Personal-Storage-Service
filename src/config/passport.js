@@ -4,7 +4,10 @@ var JwtStrategy = require('passport-jwt').Strategy;
 const prisma = require("./prisma-client")
 
 const opts = {
-    jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+    jwtFromRequest: ExtractJwt.fromExtractors([
+        ExtractJwt.fromAuthHeaderAsBearerToken(),
+        (req) => req?.cookies?.jwt,
+    ]),
     secretOrKey: process.env.JWT_SECRET,
 };
 

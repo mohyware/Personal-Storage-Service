@@ -36,6 +36,12 @@ const login = async (req, res, next) => {
             throw new UnauthenticatedError('Invalid Credentials')
         }
         const token = createJWT(user)
+        res.cookie('jwt', token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            maxAge: 60 * 1000,
+        });
+        return res.status(StatusCodes.OK).redirect('/access.html');
         res.status(StatusCodes.OK).json({ user: { userName: user.userName }, token })
     } catch (error) {
         next(error);
@@ -43,6 +49,11 @@ const login = async (req, res, next) => {
 }
 
 const logout = (req, res) => {
+    res.clearCookie('token', {
+        httpOnly: true,
+        secure: true,
+        sameSite: 'Strict',
+    });
     res.status(StatusCodes.OK).json({ message: "Logged out successfully" });
 };
 

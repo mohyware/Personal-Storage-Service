@@ -50,7 +50,7 @@ const login = async (req, res, next) => {
 const logout = (req, res) => {
     res.clearCookie('token', {
         httpOnly: true,
-        secure: true,
+        //secure: true,
         sameSite: 'Strict',
     });
     res.status(StatusCodes.OK).json({ message: "Logged out successfully" });

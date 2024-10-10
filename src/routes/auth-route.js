@@ -6,10 +6,10 @@ const {
     logout
 } = require('../controllers/auth-controller')
 const auth = require('../middleware/auth')
+const loginLimiter = require('../middleware/login-limiter')
 
-
-router.post('/register', register)
-router.post('/login', login)
+router.post('/register', loginLimiter, register)
+router.post('/login', loginLimiter, login)
 router.post('/logout', auth, logout);
 
 module.exports = router

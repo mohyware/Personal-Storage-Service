@@ -12,6 +12,6 @@ const loginLimiter = require('../middleware/login-limiter')
 router.post('/register', loginLimiter, register)
 router.post('/login', loginLimiter, login)
 router.get('/status', auth, getStatus)
-router.post('/logout', auth, logout);
+router.delete('/logout', auth, logout);
 
 module.exports = router

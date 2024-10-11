@@ -12,6 +12,8 @@ const notFoundMiddleware = require('./middleware/not-found')
 // routes
 const authRouter = require('./routes/auth-route')
 const userRouter = require('./routes/user-route')
+const folderRouter = require('./routes/folder-route')
+const fileRouter = require('./routes/file-route')
 // passport
 const initializePassport = require('./config/passport')
 var passport = require("passport");
@@ -25,6 +27,9 @@ app.use(express.urlencoded({ extended: true }));
 // routes
 app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/user', auth, userRouter);
+app.use('/api/v1/folder', auth, folderRouter);
+app.use('/api/v1/file', auth, fileRouter);
+
 // error handler
 app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);

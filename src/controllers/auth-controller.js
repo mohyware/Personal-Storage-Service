@@ -41,9 +41,9 @@ const login = async (req, res, next) => {
         }
         const token = createJWT(user)
         res.cookie('jwt', token, {
-            httpOnly: true,
+            httpOnly: process.env.NODE_ENV !== 'production',
             secure: process.env.NODE_ENV === 'production',
-            maxAge: 60 * 1000,
+            maxAge: process.env.COOKIE_LIFETIME,
         });
         res.status(StatusCodes.OK).json({ user: { userName: user.userName }, token })
     } catch (error) {
@@ -57,8 +57,8 @@ const getStatus = (req, res) => {
 
 const logout = (req, res) => {
     res.clearCookie('jwt', {
-        httpOnly: true,
-        secure: true,
+        httpOnly: process.env.NODE_ENV !== 'production',
+        secure: process.env.NODE_ENV === 'production',
         sameSite: 'Strict',
     });
     res.status(StatusCodes.OK).json({ message: "Logged out successfully" });

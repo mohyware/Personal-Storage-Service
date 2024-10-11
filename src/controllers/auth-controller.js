@@ -39,11 +39,12 @@ const login = async (req, res, next) => {
         if (!isPasswordCorrect) {
             throw new UnauthenticatedError('Invalid Credentials')
         }
+        const cookieMaxAge = Number(process.env.COOKIE_MAX_AGE) || 3600000;
         const token = createJWT(user)
         res.cookie('jwt', token, {
             httpOnly: process.env.NODE_ENV !== 'production',
             secure: process.env.NODE_ENV === 'production',
-            maxAge: process.env.COOKIE_LIFETIME,
+            maxAge: cookieMaxAge,
         });
         res.status(StatusCodes.OK).json({ user: { userName: user.userName }, token })
     } catch (error) {

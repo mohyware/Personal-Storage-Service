@@ -20,7 +20,7 @@ const getUserFolders = async (req, res) => {
 };
 
 const getFolderById = async (req, res) => {
-    const { id: folderId } = req.params;
+    const { folderId: folderId } = req.params;
 
     const folder = await Folder.findUnique({
         where: { id: Number(folderId) },
@@ -58,23 +58,30 @@ const createFolder = async (req, res) => {
     res.status(StatusCodes.CREATED).json({ folder });
 };
 
-const updateFolder = async (req, res) => {
-    const { id: folderId } = req.params;
+const updateFolder = async (req, res, next) => {
+    const { folderId: folderId } = req.params;
     const { name, parentFolderId } = req.body;
-
-    const folder = await Folder.update({
-        where: { id: Number(folderId) },
-        data: {
-            name,
-            parentFolderId: parentFolderId ? Number(parentFolderId) : null,
+    console.log(req.params.folderId)
+    try {
+        if (!folderId) {
+            throw new BadRequestError("Please  provide a valid folder id");
         }
-    });
+        const folder = await Folder.update({
+            where: { id: Number(folderId) },
+            data: {
+                name,
+                parentFolderId: parentFolderId ? Number(parentFolderId) : null,
+            }
+        });
 
-    res.status(StatusCodes.OK).json({ message: "Folder updated successfully", folder });
+        res.status(StatusCodes.OK).json({ message: "Folder updated successfully", folder });
+    } catch (err) {
+        next(err)
+    }
 };
 
 const deleteFolder = async (req, res) => {
-    const { id: folderId } = req.params;
+    const { folderId: folderId } = req.params;
 
     await Folder.delete({
         where: { id: Number(folderId) },

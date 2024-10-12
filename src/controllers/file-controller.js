@@ -71,19 +71,25 @@ const createFile = async (req, res, next) => {
 const updateFile = async (req, res, next) => {
     const { id: fileId } = req.params;
     const { name, size, mimeType, url, folderId } = req.body;
+    try {
+        if (!fileId) {
+            throw new BadRequestError("Please  provide a valid file id");
+        }
+        const file = await File.update({
+            where: { id: Number(fileId) },
+            data: {
+                name,
+                size,
+                mimeType,
+                url,
+                folderId: folderId ? Number(folderId) : null,
+            },
+        });
 
-    const file = await File.update({
-        where: { id: Number(fileId) },
-        data: {
-            name,
-            size,
-            mimeType,
-            url,
-            folderId: folderId ? Number(folderId) : null,
-        },
-    });
-
-    res.status(StatusCodes.OK).json({ message: "File updated successfully", file });
+        res.status(StatusCodes.OK).json({ message: "File updated successfully", file });
+    } catch (err) {
+        next(err);
+    }
 };
 
 const deleteFile = async (req, res) => {

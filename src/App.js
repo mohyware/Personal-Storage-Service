@@ -1,4 +1,3 @@
-import logo from './logo.svg';
 import './App.css';
 import { Login, Register, Home, Error } from './pages';
 import ProtectedRoute from './components/ProtectedRoute';
@@ -14,7 +13,7 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Navigate to="/login" replace />} />
+        <Route path="/" element={<Navigate to="/Home" replace />} />
 
         <Route path="/login" element={<Login />} />
         <Route path="/Register" element={<Register />} />

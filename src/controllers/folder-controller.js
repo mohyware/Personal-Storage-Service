@@ -21,7 +21,6 @@ const getUserFolders = async (req, res) => {
 
 const getFolderById = async (req, res) => {
     const { folderId: folderId } = req.params;
-
     const folder = await Folder.findUnique({
         where: { id: Number(folderId) },
         include: {
@@ -61,7 +60,6 @@ const createFolder = async (req, res) => {
 const updateFolder = async (req, res, next) => {
     const { folderId: folderId } = req.params;
     const { name, parentFolderId } = req.body;
-    console.log(req.params.folderId)
     try {
         if (!folderId) {
             throw new BadRequestError("Please  provide a valid folder id");

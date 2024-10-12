@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 import Alert from 'react-bootstrap/Alert';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCheck, faTimes, faInfoCircle } from "@fortawesome/free-solid-svg-icons";
+import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 
 import axios from 'axios';
 const LOGIN_URL = 'api/v1/auth/login';
@@ -28,7 +28,6 @@ const Login = () => {
     }, [email, pwd])
 
     const handleSubmit = async (e) => {
-        console.log('done')
         e.preventDefault();
 
         try {

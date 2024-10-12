@@ -42,9 +42,11 @@ const Login = () => {
             } else if (err.response?.status === 400) {
                 setErrMsg('Missing Username or Password');
             } else if (err.response?.status === 401) {
-                setErrMsg('Oops! Your email and password don’t match.');
+                setErrMsg('Oops! Your email and password don’t match')
+            } else if (err.response?.status === 429) {
+                setErrMsg('Too many login attempts');
             } else {
-                setErrMsg('Login Failed');
+                setErrMsg(`Something went wrong on our end. Please try again later`);
             }
             errRef.current.focus();
         }

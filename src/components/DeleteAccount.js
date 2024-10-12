@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom';
 const DeleteAccount = () => {
     const navigate = useNavigate();
 
-    const deleteAcount = async () => {
+    const deleteAccount = async () => {
         await axios.delete('/api/v1/user/')
             .then(function (response) {
                 navigate('/Login');
@@ -44,7 +44,7 @@ const DeleteAccount = () => {
                     <Button variant="outline-secondary" onClick={handleClose}>
                         Close
                     </Button>
-                    <Button variant="danger" onClick={deleteAcount}>Understood</Button>
+                    <Button variant="danger" onClick={deleteAccount}>Understood</Button>
                 </Modal.Footer>
             </Modal>
         </>

@@ -51,10 +51,6 @@ form {
     padding-bottom: 1rem;
 }
 
-a, a:visited {
-    color: #fff;
-}
-
 input[type="text"],
 input[type="password"],
 input[type="email"],
@@ -119,3 +115,12 @@ button {
 .line {
     display: inline-block;
 }
+.grid-container {
+    display: grid;
+    grid-template-columns: 1fr 3fr; 
+    gap: 10px; 
+  }
+
+  .item2 {
+    grid-column: span 2; 
+  }

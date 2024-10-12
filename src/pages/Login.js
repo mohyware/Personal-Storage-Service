@@ -1,6 +1,10 @@
 import { useRef, useState, useEffect } from 'react';
 import './style.css'
 import { Link } from 'react-router-dom';
+import Button from 'react-bootstrap/Button';
+import Alert from 'react-bootstrap/Alert';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCheck, faTimes, faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 
 import axios from 'axios';
 const LOGIN_URL = 'api/v1/auth/login';
@@ -13,6 +17,7 @@ const Login = () => {
     const [pwd, setPwd] = useState('');
     const [errMsg, setErrMsg] = useState('');
     const [success, setSuccess] = useState(false);
+    const [errVisible, setErrVisible] = useState(false);
 
     useEffect(() => {
         userRef.current.focus();
@@ -23,6 +28,7 @@ const Login = () => {
     }, [email, pwd])
 
     const handleSubmit = async (e) => {
+        console.log('done')
         e.preventDefault();
 
         try {
@@ -48,7 +54,12 @@ const Login = () => {
             } else {
                 setErrMsg(`Something went wrong on our end. Please try again later`);
             }
-            errRef.current.focus();
+            setErrVisible(true);
+            const timer = setTimeout(() => {
+                setErrVisible(false);
+            }, 2000);
+            return () => clearTimeout(timer);
+
         }
     }
 
@@ -65,7 +76,13 @@ const Login = () => {
                     </section>
                 ) : (
                     <section>
-                        <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">{errMsg}</p>
+                        <div ref={errRef} className={`errmsg ${errVisible ? "active" : "hide"}`} >
+                            <Alert key="warning" variant="danger">
+                                <FontAwesomeIcon icon={faInfoCircle} />
+                                <span> </span>
+                                {errMsg}
+                            </Alert>
+                        </div>
                         <h1>Sign In</h1>
                         <form onSubmit={handleSubmit}>
                             <label htmlFor="email">Email:</label>
@@ -87,12 +104,15 @@ const Login = () => {
                                 value={pwd}
                                 required
                             />
-                            <button>Sign In</button>
+                            <br />
+                            <button className="btn-success" >Sign In</button>
                         </form>
                         <p>
                             Need an Account?<br />
                             <span className="line">
-                                <Link to="/register">Sign Up</Link>
+                                <Link to="/register" style={{ textDecoration: 'none' }}>
+                                    <Button variant="primary">Sign Up</Button>
+                                </Link>
                             </span>
                         </p>
                     </section>

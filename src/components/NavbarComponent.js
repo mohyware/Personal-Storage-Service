@@ -9,13 +9,12 @@ import { Link } from 'react-router-dom';
 import Logout from './Logout';
 import DeleteAccount from './DeleteAccount';
 
-
 function NavbarComponent() {
   return (
     <>
       {[false].map((expand) => (
-        <Navbar key={expand} expand={expand} className="bg-body-tertiary mb-3" sticky='top'>
-          <Container fluid>
+        <Navbar key={expand} expand={expand} className="bg-body-tertiary mb-3" sticky='top' style={{ background: '#244e79' }} >
+          <Container fluid style={{ background: '#244e79' }}>
             <Navbar.Toggle aria-controls={`offcanvasNavbar-expand-${expand}`} />
             <Navbar.Brand style={{ marginLeft: '-420px', marginTop: '-10px' }} href="#">Personal Storage Service</Navbar.Brand>
 

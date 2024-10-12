@@ -2,6 +2,10 @@ import { useRef, useState, useEffect } from "react";
 import { faCheck, faTimes, faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from 'react-router-dom';
+import Form from 'react-bootstrap/Form';
+import InputGroup from 'react-bootstrap/InputGroup';
+import Alert from 'react-bootstrap/Alert';
+import Button from 'react-bootstrap/Button';
 
 import './style.css'
 import axios from 'axios';
@@ -30,6 +34,8 @@ const Register = () => {
 
     const [errMsg, setErrMsg] = useState('');
     const [success, setSuccess] = useState(false);
+
+    const [errVisible, setErrVisible] = useState(false);
 
     useEffect(() => {
         userRef.current.focus();
@@ -83,7 +89,11 @@ const Register = () => {
             } else {
                 setErrMsg(`${err.response.data.msg}`);
             }
-            errRef.current.focus();
+            setErrVisible(true);
+            const timer = setTimeout(() => {
+                setErrVisible(false);
+            }, 2000);
+            return () => clearTimeout(timer);
         }
     }
 
@@ -99,7 +109,13 @@ const Register = () => {
                     </section>
                 ) : (
                     <section>
-                        <p ref={errRef} className={errMsg ? "errmsg" : "offscreen"} aria-live="assertive">{errMsg}</p>
+                        <div ref={errRef} className={`errmsg ${errVisible ? "active" : "hide"}`} >
+                            <Alert key="warning" variant="danger">
+                                <FontAwesomeIcon icon={faInfoCircle} />
+                                <span> </span>
+                                {errMsg}
+                            </Alert>
+                        </div>
                         <h1>Register</h1>
                         <form onSubmit={handleSubmit}>
                             <label htmlFor="username">
@@ -107,7 +123,10 @@ const Register = () => {
                                 <FontAwesomeIcon icon={faCheck} className={validName ? "valid" : "hide"} />
                                 <FontAwesomeIcon icon={faTimes} className={validName || !user ? "hide" : "invalid"} />
                             </label>
-                            <input
+
+                            <input className="mb-3"
+                                aria-label="Username"
+                                aria-describedby="uidnote"
                                 type="text"
                                 id="username"
                                 ref={userRef}
@@ -116,41 +135,44 @@ const Register = () => {
                                 value={user}
                                 required
                                 aria-invalid={validName ? "false" : "true"}
-                                aria-describedby="uidnote"
                                 onFocus={() => setUserFocus(true)}
                                 onBlur={() => setUserFocus(false)}
                             />
-                            <p id="uidnote" className={userFocus && user && !validName ? "instructions" : "offscreen"}>
-                                <FontAwesomeIcon icon={faInfoCircle} />
-                                4 to 24 characters.<br />
-                                Must begin with a letter.<br />
-                                Letters, numbers, underscores, hyphens allowed.
-                            </p>
-
-
+                            <div id="uidnote" className={`uidnote ${userFocus && user && !validName ? "active" : "offscreen"}`}>
+                                <Alert key="warning" variant="danger">
+                                    <FontAwesomeIcon icon={faInfoCircle} />
+                                    <span> </span>
+                                    4 to 24 characters.<br />
+                                    Must begin with a letter.<br />
+                                    Letters, numbers, underscores, hyphens allowed.
+                                </Alert>
+                            </div>
 
                             <label htmlFor="email">
                                 Email:
                                 <FontAwesomeIcon icon={faCheck} className={validEmail ? "valid" : "hide"} />
                                 <FontAwesomeIcon icon={faTimes} className={validEmail || !email ? "hide" : "invalid"} />
                             </label>
-                            <input
+
+
+                            <input className="mb-3"
+                                aria-label="email"
+                                aria-describedby="emailNote"
                                 type="email"
                                 id="email"
                                 onChange={(e) => setEmail(e.target.value)}
                                 value={email}
                                 required
                                 aria-invalid={validEmail ? "false" : "true"}
-                                aria-describedby="emailNote"
                                 onFocus={() => setEmailFocus(true)}
                                 onBlur={() => setEmailFocus(false)}
                             />
-                            <p id="emailNote" className={emailFocus && email && !validEmail ? "instructions" : "offscreen"}>
-                                <FontAwesomeIcon icon={faInfoCircle} />
-                                Please enter a valid email
-                            </p>
-
-
+                            <div id="emailNote" className={`emailNote ${emailFocus && email && !validEmail ? "active" : "offscreen"}`}>
+                                <Alert key="warning" variant="danger">
+                                    <FontAwesomeIcon icon={faInfoCircle} /><span> </span>
+                                    Please enter a valid email
+                                </Alert>
+                            </div>
 
                             <label htmlFor="password">
                                 Password:
@@ -168,20 +190,25 @@ const Register = () => {
                                 onFocus={() => setPwdFocus(true)}
                                 onBlur={() => setPwdFocus(false)}
                             />
-                            <p id="pwdnote" className={pwdFocus && !validPwd ? "instructions" : "offscreen"}>
-                                <FontAwesomeIcon icon={faInfoCircle} />
-                                8 to 24 characters.<br />
-                                Must include uppercase and lowercase letters, a number and a special character.<br />
-                                Allowed special characters: <span aria-label="exclamation mark">!</span> <span aria-label="at symbol">@</span> <span aria-label="hashtag">#</span> <span aria-label="dollar sign">$</span> <span aria-label="percent">%</span>
-                            </p>
-
-
-                            <button disabled={!validName || !validPwd || !validEmail ? true : false}>Sign Up</button>
+                            <div id="pwdnote" className={`pwdnote ${pwdFocus && !validPwd ? "active" : "offscreen"}`}>
+                                <Alert key="warning" variant="danger">
+                                    <FontAwesomeIcon icon={faInfoCircle} />
+                                    <span> </span>
+                                    8 to 24 characters.<br />
+                                    Must include uppercase and lowercase letters,<br />
+                                    a number and a special character.<br />
+                                    Allowed special characters: <span aria-label="exclamation mark">!</span> <span aria-label="at symbol">@</span> <span aria-label="hashtag">#</span> <span aria-label="dollar sign">$</span> <span aria-label="percent">%</span>
+                                </Alert>
+                            </div>
+                            <br />
+                            <button className="btn-success" disabled={!validName || !validPwd || !validEmail ? true : false}>Sign Up</button>
                         </form>
                         <p>
                             Already registered?<br />
                             <span className="line">
-                                <Link to="/login">Sign In</Link>
+                                <Link to="/login" style={{ textDecoration: 'none' }}>
+                                    <Button variant="primary">Sign In</Button>
+                                </Link>
                             </span>
                         </p>
                     </section>

@@ -2,13 +2,30 @@ import { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
+import axios from 'axios';
 
 function AddFolder() {
     const [show, setShow] = useState(false);
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
+    const [folder, setFolder] = useState('');
 
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            await axios.post('api/v1/folder',
+                JSON.stringify({ name: folder }),
+                {
+                    headers: { 'Content-Type': 'application/json' },
+                    withCredentials: true
+                }
+            );
+        } catch (err) {
+            console.log(err.response)
+        }
+        window.location.reload();
+    }
     return (
         <>
             <Button variant="success" onClick={handleShow} style={{ marginLeft: "19px", width: "85%" }}>
@@ -27,6 +44,8 @@ function AddFolder() {
                                 type="text"
                                 placeholder="Please Don't Name it hfifdsoafodaso"
                                 autoFocus
+                                onChange={(e) => setFolder(e.target.value)}
+                                value={folder}
                             />
                         </Form.Group>
                     </Form>
@@ -35,7 +54,7 @@ function AddFolder() {
                     <Button variant="secondary" onClick={handleClose}>
                         Close
                     </Button>
-                    <Button variant="success" onClick={handleClose}>
+                    <Button variant="success" onClick={handleSubmit} >
                         Submit
                     </Button>
                 </Modal.Footer>

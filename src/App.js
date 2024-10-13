@@ -1,6 +1,7 @@
 import './App.css';
 import { Login, Register, Home, Error } from './pages';
 import ProtectedRoute from './components/ProtectedRoute';
+import FolderDashboard from './components/folders/FolderDashboard';
 
 import {
   BrowserRouter as Router,
@@ -20,7 +21,7 @@ function App() {
 
         {/* Protected route */}
         <Route
-          path="/Home"
+          path="/Home/"
           element={
             <ProtectedRoute>
               <Home />
@@ -28,6 +29,14 @@ function App() {
           }
         />
 
+        <Route
+          path="/editProfile/"
+          element={
+            <ProtectedRoute>
+              <Home />
+            </ProtectedRoute>
+          }
+        />
         {/* Default route */}
         <Route path="*" element={<Error />} />
       </Routes>

@@ -37,14 +37,15 @@ function NavbarComponent() {
             >
               <Offcanvas.Header closeButton>
                 <Offcanvas.Title id={`offcanvasNavbarLabel-expand-${expand}`}>
-                  Hello, Mohy elden!
+                  Hello, { }!
                 </Offcanvas.Title>
               </Offcanvas.Header>
               <Offcanvas.Body>
                 <Nav className="justify-content-end flex-grow-1 pe-1" style={{ lineHeight: "2" }}>
                   <div>
+                    <label></label>
                     <Nav.Link as={Link} to="/Home">Home</Nav.Link>
-                    <Nav.Link as={Link} href="#action2">Edit Profile</Nav.Link>
+                    <Nav.Link as={Link} to="/editProfile">Edit Profile</Nav.Link>
                   </div>
                   <div>
                     <Nav.Link as={Logout} to="/Login" >Logout</Nav.Link>

@@ -19,56 +19,75 @@ const getUserFolders = async (req, res) => {
     res.status(StatusCodes.OK).json({ folders });
 };
 
-const getFolderById = async (req, res) => {
+const getFolderById = async (req, res, next) => {
     const { folderId: folderId } = req.params;
-    const folder = await Folder.findUnique({
-        where: { id: Number(folderId) },
-        include: {
-            subFolders: true,
-            files: true,
+    try {
+
+        const folder = await Folder.findUnique({
+            where: { id: Number(folderId) },
+            include: {
+                subFolders: true,
+                files: true,
+            }
+        });
+
+        if (!folder) {
+            throw new BadRequestError(`No folder found with id ${folderId}`);
         }
-    });
 
-    if (!folder) {
-        throw new BadRequestError(`No folder found with id ${folderId}`);
-    }
-
-    res.status(StatusCodes.OK).json({ folder });
+        res.status(StatusCodes.OK).json({ folder });
+    } catch (err) { next(err) }
 };
 
-const createFolder = async (req, res) => {
+const createFolder = async (req, res, next) => {
     const {
         body: { name, parentFolderId },
         user: { id: userId }
     } = req;
 
-    if (!name) {
-        throw new BadRequestError("Folder name is required");
-    }
+    try {
 
-    const folder = await Folder.create({
-        data: {
-            name,
-            userId,
-            parentFolderId: parentFolderId ? Number(parentFolderId) : null,
+        if (!name) {
+            throw new BadRequestError("Folder name is required");
         }
-    });
 
-    res.status(StatusCodes.CREATED).json({ folder });
+        const folder = await Folder.create({
+            data: {
+                name,
+                userId,
+                parentFolderId: parentFolderId ? Number(parentFolderId) : null,
+            }
+        });
+
+        res.status(StatusCodes.CREATED).json({ folder });
+    } catch (err) {
+        next(err)
+    }
 };
 
 const updateFolder = async (req, res, next) => {
     const { folderId: folderId } = req.params;
     const { name, parentFolderId } = req.body;
     try {
-        if (!folderId) {
-            throw new BadRequestError("Please  provide a valid folder id");
+        // check folder exist or not
+        const oldFolder = await Folder.findUnique({ where: { id: Number(folderId) } });
+        if (!oldFolder) {
+            throw new BadRequestError("no folder was found with this folder id");
+        }
+        // check parentFolder exist or not
+        const parentFolder = await Folder.findUnique({ where: { id: Number(parentFolderId) } });
+        if (!parentFolder) {
+            throw new BadRequestError("no folder was found with this parent folder id");
+        }
+
+        if (parentFolderId == folderId) {
+            throw new BadRequestError("folder cant be parent for itself!");
         }
         const folder = await Folder.update({
             where: { id: Number(folderId) },
             data: {
                 name,
-                parentFolderId: parentFolderId ? Number(parentFolderId) : null,
+                parentFolderId: parentFolderId,
             }
         });
 

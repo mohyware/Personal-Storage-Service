@@ -3,6 +3,7 @@ const { StatusCodes } = require('http-status-codes');
 const { BadRequestError, NotFoundError } = require('../errors');
 
 const File = prisma.file;
+const Folder = prisma.folder;
 
 const getUserFiles = async (req, res) => {
     const {
@@ -42,18 +43,20 @@ const getFileById = async (req, res) => {
 
 const createFile = async (req, res, next) => {
     const {
-        file: { originalname: name, size, mimetype, path: url, folderId },
+        file: { originalname: originalname, size, mimetype, path: url },
+        body: { name, folderId },
         user: { id: userId }
     } = req;
 
     try {
-        if (!name || !size || !mimetype || !url) {
+        if (!originalname || !size || !mimetype || !url) {
             throw new BadRequestError("All file details (name, size, mimeType, and URL) are required");
         }
-
+        // name it with uploaded original name if user didnt provide any name
+        const fileName = name ? name : originalname;
         const file = await File.create({
             data: {
-                name,
+                name: fileName,
                 size,
                 mimeType: mimetype,
                 url,
@@ -69,20 +72,24 @@ const createFile = async (req, res, next) => {
 };
 
 const updateFile = async (req, res, next) => {
-    const { id: fileId } = req.params;
-    const { name, size, mimeType, url, folderId } = req.body;
+    const { fileId } = req.params;
+    const { name, folderId } = req.body;
     try {
-        if (!fileId) {
-            throw new BadRequestError("Please  provide a valid file id");
+        // check file exist or not
+        const oldFile = await File.findUnique({ where: { id: Number(fileId) } });
+        if (!oldFile) {
+            throw new BadRequestError("no file was found with this id");
+        }
+        // check Folder exist or not
+        const folder = await Folder.findUnique({ where: { id: Number(folderId) } });
+        if (!folder) {
+            throw new BadRequestError("no folder was found with this folder id");
         }
         const file = await File.update({
             where: { id: Number(fileId) },
             data: {
                 name,
-                size,
-                mimeType,
-                url,
-                folderId: folderId ? Number(folderId) : null,
+                folderId: folderId,
             },
         });
 

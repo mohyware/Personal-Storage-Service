@@ -19,8 +19,8 @@ const getUserFiles = async (req, res) => {
     res.status(StatusCodes.OK).json({ files });
 };
 
-const getFileById = async (req, res) => {
-    const { fileId: fileId } = req.params;
+const getFileById = async (req, res, next) => {
+    const { fileId } = req.params;
 
     try {
 
@@ -34,7 +34,8 @@ const getFileById = async (req, res) => {
         if (!file) {
             throw new NotFoundError(`No file found with id ${fileId}`);
         }
-
+        // append url for local download
+        req.body.url = file.url
         res.status(StatusCodes.OK).json({ file });
     } catch (err) {
         next(err)
@@ -43,17 +44,24 @@ const getFileById = async (req, res) => {
 
 const createFile = async (req, res, next) => {
     const {
-        file: { originalname: originalname, size, mimetype, path: url },
-        body: { name, folderId },
+        file: { originalname, size, mimetype, path },
+        body: { name, folderId, public_id },
         user: { id: userId }
     } = req;
 
     try {
-        if (!originalname || !size || !mimetype || !url) {
-            throw new BadRequestError("All file details (name, size, mimeType, and URL) are required");
+        // check if there is passed id then if there is Folder exist with this id
+        if (folderId) {
+            const folder = await Folder.findUnique({ where: { id: Number(folderId) } });
+            if (!folder) {
+                throw new BadRequestError("no folder was found with this folder id");
+            }
         }
-        // name it with uploaded original name if user didnt provide any name
+
+        // name it with uploaded original name if user didn`t provide any name
         const fileName = name ? name : originalname;
+        // if not in cloud store folder path in local
+        const url = public_id ? public_id : path
         const file = await File.create({
             data: {
                 name: fileName,
@@ -65,7 +73,10 @@ const createFile = async (req, res, next) => {
             },
         });
 
-        res.status(StatusCodes.CREATED).json({ file });
+        res.status(StatusCodes.CREATED).json({
+            file,
+            ...res.locals.customData,
+        });
     } catch (err) {
         next(err);
     }

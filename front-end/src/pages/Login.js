@@ -1,6 +1,6 @@
 import { useRef, useState, useEffect } from 'react';
 import './style.css'
-import { Link } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 import Alert from 'react-bootstrap/Alert';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -13,10 +13,13 @@ const Login = () => {
     const userRef = useRef();
     const errRef = useRef();
 
+    const navigate = useNavigate();
+    const location = useLocation();
+    const from = location.state?.from?.pathname || "/";
+
     const [email, setEmail] = useState('');
     const [pwd, setPwd] = useState('');
     const [errMsg, setErrMsg] = useState('');
-    const [success, setSuccess] = useState(false);
     const [errVisible, setErrVisible] = useState(false);
 
     useEffect(() => {
@@ -40,7 +43,7 @@ const Login = () => {
             );
             setEmail('');
             setPwd('');
-            setSuccess(true);
+            navigate(from, { replace: true });
         } catch (err) {
             if (!err?.response) {
                 setErrMsg('No Server Response');
@@ -63,61 +66,48 @@ const Login = () => {
     }
 
     return (
-        <>
-            <div id='form'>
-                {success ? (
-                    <section>
-                        <h1>You are logged in!</h1>
-                        <br />
-                        <p>
-                            <Link to="/Home">Go to Home</Link>
-                        </p>
-                    </section>
-                ) : (
-                    <section>
-                        <div ref={errRef} className={`errmsg ${errVisible ? "active" : "hide"}`} >
-                            <Alert key="warning" variant="danger">
-                                <FontAwesomeIcon icon={faInfoCircle} />
-                                <span> </span>
-                                {errMsg}
-                            </Alert>
-                        </div>
-                        <h1>Sign In</h1>
-                        <form onSubmit={handleSubmit}>
-                            <label htmlFor="email">Email:</label>
-                            <input
-                                type="email"
-                                id="email"
-                                ref={userRef}
-                                autoComplete="off"
-                                onChange={(e) => setEmail(e.target.value)}
-                                value={email}
-                                required
-                            />
 
-                            <label htmlFor="password">Password:</label>
-                            <input
-                                type="password"
-                                id="password"
-                                onChange={(e) => setPwd(e.target.value)}
-                                value={pwd}
-                                required
-                            />
-                            <br />
-                            <button className="btn-success" >Sign In</button>
-                        </form>
-                        <p>
-                            Need an Account?<br />
-                            <span className="line">
-                                <Link to="/register" style={{ textDecoration: 'none' }}>
-                                    <Button variant="primary">Sign Up</Button>
-                                </Link>
-                            </span>
-                        </p>
-                    </section>
-                )}
+        <section>
+            <div ref={errRef} className={`errmsg ${errVisible ? "active" : "hide"}`} >
+                <Alert key="warning" variant="danger">
+                    <FontAwesomeIcon icon={faInfoCircle} />
+                    <span> </span>
+                    {errMsg}
+                </Alert>
             </div>
-        </>
+            <h1>Sign In</h1>
+            <form onSubmit={handleSubmit}>
+                <label htmlFor="email">Email:</label>
+                <input
+                    type="email"
+                    id="email"
+                    ref={userRef}
+                    autoComplete="off"
+                    onChange={(e) => setEmail(e.target.value)}
+                    value={email}
+                    required
+                />
+
+                <label htmlFor="password">Password:</label>
+                <input
+                    type="password"
+                    id="password"
+                    onChange={(e) => setPwd(e.target.value)}
+                    value={pwd}
+                    required
+                />
+                <br />
+                <button className="btn-success" >Sign In</button>
+            </form>
+            <p>
+                Need an Account?<br />
+                <span className="line">
+                    <Link to="/register" style={{ textDecoration: 'none' }}>
+                        <Button variant="primary">Sign Up</Button>
+                    </Link>
+                </span>
+            </p>
+        </section>
     )
 }
 

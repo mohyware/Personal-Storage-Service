@@ -1,46 +1,30 @@
 import './App.css';
 import { Login, Register, Home, Error } from './pages';
 import ProtectedRoute from './components/ProtectedRoute';
-import FolderDashboard from './components/folders/FolderDashboard';
+import Layout from './components/Layout';
+import Unauthorized from './components/Unauthorized';
 
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  Navigate
-} from "react-router-dom";
+import { Routes, Route } from 'react-router-dom';
+
 
 function App() {
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Navigate to="/Home" replace />} />
+    <Routes>
+      <Route path="/" element={<Layout />}>
+        {/* public routes */}
+        <Route path="login" element={<Login />} />
+        <Route path="register" element={<Register />} />
+        <Route path="unauthorized" element={<Unauthorized />} />
 
-        <Route path="/login" element={<Login />} />
-        <Route path="/Register" element={<Register />} />
+        {/* we want to protect these routes */}
+        <Route element={<ProtectedRoute />}>
+          <Route path="/" element={<Home />} />
+        </Route>
 
-        {/* Protected route */}
-        <Route
-          path="/Home/"
-          element={
-            <ProtectedRoute>
-              <Home />
-            </ProtectedRoute>
-          }
-        />
-
-        <Route
-          path="/editProfile/"
-          element={
-            <ProtectedRoute>
-              <Home />
-            </ProtectedRoute>
-          }
-        />
-        {/* Default route */}
+        {/* catch all */}
         <Route path="*" element={<Error />} />
-      </Routes>
-    </Router>
+      </Route>
+    </Routes>
   );
 }
 export default App;

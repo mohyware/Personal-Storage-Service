@@ -8,8 +8,10 @@ import Offcanvas from 'react-bootstrap/Offcanvas';
 import { Link } from 'react-router-dom';
 import Logout from './Logout';
 import DeleteAccount from './DeleteAccount';
+import useAuth from "../hooks/useAuth";
 
 function NavbarComponent() {
+  const { auth } = useAuth();
   return (
     <>
       {[false].map((expand) => (
@@ -37,7 +39,7 @@ function NavbarComponent() {
             >
               <Offcanvas.Header closeButton>
                 <Offcanvas.Title id={`offcanvasNavbarLabel-expand-${expand}`}>
-                  Hello, { }!
+                  Hello, {auth.userName}!
                 </Offcanvas.Title>
               </Offcanvas.Header>
               <Offcanvas.Body>

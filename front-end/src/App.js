@@ -21,6 +21,10 @@ function App() {
           <Route path="/" element={<Home />} />
         </Route>
 
+        <Route element={<ProtectedRoute />}>
+          <Route path="/folder/:folderId" element={<Home />} />
+        </Route>
+
         {/* catch all */}
         <Route path="*" element={<Error />} />
       </Route>

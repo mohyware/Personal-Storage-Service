@@ -4,18 +4,19 @@ import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
 import axios from 'axios';
 
-function AddFolder() {
+function AddFolder({ currentFolder }) {
     const [show, setShow] = useState(false);
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
     const [folder, setFolder] = useState('');
-
+    if (currentFolder === null)
+        return;
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await axios.post('api/v1/folder',
-                JSON.stringify({ name: folder }),
+            await axios.post('/api/v1/folder',
+                JSON.stringify({ name: folder, parentFolderId: currentFolder.id }),
                 {
                     headers: { 'Content-Type': 'application/json' },
                     withCredentials: true
@@ -24,6 +25,7 @@ function AddFolder() {
         } catch (err) {
             console.log(err.response)
         }
+        handleClose();
         window.location.reload();
     }
     return (

@@ -21,7 +21,6 @@ html {
 
 body {
     background-color: #e1f3fc !important;
-    min-height: 100vh;
 }
 
 .App {
@@ -29,7 +28,6 @@ body {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  min-height: 100vh; 
   padding: 1rem 0.5rem;
 }
 

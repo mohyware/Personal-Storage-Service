@@ -10,7 +10,7 @@ const ProtectedRoute = () => {
     const location = useLocation();
 
     useEffect(() => {
-        axios('api/v1/user', {
+        axios('/api/v1/user', {
             method: 'GET',
             credentials: 'include'
         })

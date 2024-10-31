@@ -1,22 +1,27 @@
 import NavbarComponent from "../components/NavbarComponent";
 import AddFolder from "../components/folders/AddFolder";
-import FolderDashboard from "../components/folders/FolderDashboard";
-
 import UploadFile from "../components/files/UploadFile";
 import Dashboard from "../components/Dashboard";
+import { useFolder } from "../hooks/useFolder";
+import FolderBreadcrumbs from "../components/folders/FolderBreadcrumbs"
 import './style.css'
 import React from 'react';
+import { useParams } from "react-router-dom";
 const Home = () => {
+    const { folderId } = useParams();
+    const { folder } = useFolder(folderId);
     return (
         <div>
             <NavbarComponent />
             <div className="grid-container">
                 <div className="item1">
-                    <AddFolder />
+                    <AddFolder currentFolder={folder} />
                     <UploadFile />
                 </div>
                 <div className="item1">
-                    <Dashboard />
+                    <FolderBreadcrumbs currentFolder={folder} />
+                    <br></br>
+                    <Dashboard currentFolder={folder} />
                 </div>
             </div>
         </div>

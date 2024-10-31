@@ -15,7 +15,7 @@ function EditFolder(props) {
         e.preventDefault();
         try {
             await axios.patch(`/api/v1/folder/${props.FolderId}`,
-                JSON.stringify({ name: folder, ParentFolderId: props.ParentFolderId }),
+                JSON.stringify({ name: folder, parentFolderId: props.ParentFolderId }),
                 {
                     headers: { 'Content-Type': 'application/json' },
                     withCredentials: true

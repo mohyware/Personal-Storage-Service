@@ -1,46 +1,20 @@
 import Table from 'react-bootstrap/Table';
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
 import { faFolder } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import EditFolder from "../components/folders/EditFolder";
 import DeleteFolder from "../components/folders/DeleteFolder";
 import ViewFolder from "../components/folders/ViewFolder";
 
-function Dashboard() {
-    const [folders, setFolders] = useState([]);
-    const [files, setFiles] = useState([]);
-    const navigate = useNavigate();
+function Dashboard({ currentFolder }) {
+    if (!currentFolder)
+        return;
 
-    const getFolders = async () => {
-        await axios.get('/api/v1/folder/')
-            .then(function (response) {
-                setFolders(response.data.folders);
-                console.log(response.data)
-            })
-            .catch(function (error) {
-                console.log(error)
-                navigate('/Login');
+    if (currentFolder.subFolders.length < 1)
+        return (<p>This Folder is Empty</p>)
 
-            });
-    }
-    useEffect(() => {
-        getFolders();
-        axios.get('/api/v1/file/')
-            .then(function (response) {
-                setFiles(response.data.files);
-                console.log(response.data)
-            })
-            .catch(function (error) {
-                console.log(error)
-                navigate('/Login');
-
-            });
-    }, []);
     return (
         <div>
-            /root/
             <Table responsive>
                 <thead>
                     <tr>
@@ -52,7 +26,7 @@ function Dashboard() {
                     </tr>
                 </thead>
                 <tbody>
-                    {folders.map((folder) => {
+                    {currentFolder.subFolders.map((folder) => {
                         return (
                             <tr key={folder.id}>
                                 <td>{folder.id}</td>
@@ -60,7 +34,7 @@ function Dashboard() {
                                 <td>{folder.name}</td>
                                 <td style={{ width: '10%' }}><div style={{ display: 'flex', gap: '10px' }}>
                                     <ViewFolder FolderId={folder.id} />
-                                    <EditFolder FolderId={folder.id} FolderName={folder.name} ParentFolderId={folder.ParentFolderId} />
+                                    <EditFolder FolderId={folder.id} FolderName={folder.name} ParentFolderId={folder.parentFolderId} />
                                     <DeleteFolder FolderId={folder.id} />
                                 </div></td>
                                 <td>{folder.createdAt}</td>

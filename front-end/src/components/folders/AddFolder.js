@@ -4,7 +4,7 @@ import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
 import axios from 'axios';
 
-function AddFolder({ currentFolder }) {
+function AddFolder({ currentFolder, refetchFolderData }) {
     const [show, setShow] = useState(false);
 
     const handleClose = () => setShow(false);
@@ -22,11 +22,12 @@ function AddFolder({ currentFolder }) {
                     withCredentials: true
                 }
             );
+            refetchFolderData();
+            setFolder('');
         } catch (err) {
-            console.log(err.response)
+            console.log(err)
         }
         handleClose();
-        window.location.reload();
     }
     return (
         <>

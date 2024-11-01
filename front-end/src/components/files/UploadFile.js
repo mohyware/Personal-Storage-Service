@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Form, Button, Container, Spinner } from 'react-bootstrap';
 import axios from 'axios';
 
-function UploadFile({ currentFolder }) {
+function UploadFile({ currentFolder, refetchFolderData }) {
     const [file, setFile] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
+    const fileInputRef = useRef(null);
 
     const handleFileChange = (event) => {
         setFile(event.target.files[0]);
@@ -26,11 +27,17 @@ function UploadFile({ currentFolder }) {
                     },
                     withCredentials: true
                 });
-                window.location.reload();
+
+                // Reset file input
+                if (fileInputRef.current) {
+                    fileInputRef.current.value = "";
+                }
             } catch (err) {
                 console.log(err.response);
             } finally {
                 setIsLoading(false);
+                setFile(null);
+                refetchFolderData();
             }
         } else {
             console.log("No file selected");
@@ -42,7 +49,11 @@ function UploadFile({ currentFolder }) {
             <Form onSubmit={handleSubmit} >
                 <Form.Group controlId="formFile" >
                     <br></br>
-                    <Form.Control type="file" onChange={handleFileChange} />
+                    <Form.Control
+                        ref={fileInputRef}
+                        type="file"
+                        onChange={handleFileChange}
+                    />
                 </Form.Group>
                 <Button
                     variant="primary"

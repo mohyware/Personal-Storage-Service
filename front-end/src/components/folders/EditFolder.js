@@ -22,10 +22,12 @@ function EditFolder(props) {
                     withCredentials: true
                 }
             );
+            props.refetchFolderData();
+            setFolder('')
         } catch (err) {
             console.log(err.response)
         }
-        window.location.reload();
+        handleClose();
     }
     return (
         <>
@@ -40,7 +42,7 @@ function EditFolder(props) {
                 <Modal.Body>
                     <Form>
                         <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-                            <Form.Label>Are you sure you want to update {props.FolderName}?</Form.Label>
+                            <Form.Label className="text-truncate" style={{ maxWidth: '400px' }}>Are you sure you want to update {props.FolderName}?</Form.Label>
                             <Form.Control
                                 type="text"
                                 placeholder="Please Don't Name it hfifdsoafodaso"

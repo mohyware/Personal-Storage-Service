@@ -26,7 +26,8 @@ function EditFile(props) {
         } catch (err) {
             console.log(err.response)
         }
-        window.location.reload();
+        props.refetchFolderData();
+        handleClose();
     }
     return (
         <>
@@ -41,7 +42,7 @@ function EditFile(props) {
                 <Modal.Body>
                     <Form>
                         <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-                            <Form.Label>Are you sure you want to update {props.fileName}?</Form.Label>
+                            <Form.Label className="text-truncate" style={{ maxWidth: '400px' }}>Are you sure you want to update {props.fileName}?</Form.Label>
                             <Form.Control
                                 type="text"
                                 placeholder="Please Don't Name it hfifdsoafodaso"

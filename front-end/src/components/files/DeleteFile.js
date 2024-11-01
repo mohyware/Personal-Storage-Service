@@ -17,7 +17,8 @@ function DeleteFile(props) {
         } catch (err) {
             console.log(err.response)
         }
-        window.location.reload();
+        props.refetchFolderData();
+        handleClose();
     }
     return (
         <>

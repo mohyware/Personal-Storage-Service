@@ -74,14 +74,16 @@ const updateFolder = async (req, res, next) => {
         if (!oldFolder) {
             throw new BadRequestError("no folder was found with this folder id");
         }
-        // check parentFolder exist or not
-        const parentFolder = await Folder.findUnique({ where: { id: Number(parentFolderId) } });
-        if (!parentFolder) {
-            throw new BadRequestError("no folder was found with this parent folder id");
-        }
+        // check if parentFolder passed if it exist or not
+        if (parentFolderId) {
+            const parentFolder = await Folder.findUnique({ where: { id: Number(parentFolderId) } });
+            if (!parentFolder) {
+                throw new BadRequestError("no folder was found with this parent folder id");
+            }
 
-        if (parentFolderId == folderId) {
-            throw new BadRequestError("folder cant be parent for itself!");
+            if (parentFolderId == folderId) {
+                throw new BadRequestError("folder cant be parent for itself!");
+            }
         }
         const folder = await Folder.update({
             where: { id: Number(folderId) },

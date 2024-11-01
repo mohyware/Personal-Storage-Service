@@ -51,7 +51,7 @@ const createFile = async (req, res, next) => {
 
     try {
         // check if there is passed id then if there is Folder exist with this id
-        if (folderId) {
+        if (!folderId) {
             const folder = await Folder.findUnique({ where: { id: Number(folderId) } });
             if (!folder) {
                 throw new BadRequestError("no folder was found with this folder id");
@@ -92,9 +92,11 @@ const updateFile = async (req, res, next) => {
             throw new BadRequestError("no file was found with this id");
         }
         // check Folder exist or not
-        const folder = await Folder.findUnique({ where: { id: Number(folderId) } });
-        if (!folder) {
-            throw new BadRequestError("no folder was found with this folder id");
+        if (folderId) {
+            const folder = await Folder.findUnique({ where: { id: Number(folderId) } });
+            if (!folder) {
+                throw new BadRequestError("no folder was found with this folder id");
+            }
         }
         const file = await File.update({
             where: { id: Number(fileId) },

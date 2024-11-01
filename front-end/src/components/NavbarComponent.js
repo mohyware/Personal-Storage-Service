@@ -15,23 +15,10 @@ function NavbarComponent() {
   return (
     <>
       {[false].map((expand) => (
-        <Navbar key={expand} expand={expand} className="bg-body-tertiary mb-3" sticky='top' style={{ background: '#244e79' }} >
-          <Container fluid style={{ background: '#244e79' }}>
+        <Navbar key={expand} expand={expand} className=" mb-3" sticky='top' style={{ background: '#244e79' }} >
+          <Container fluid style={{ background: '#244e79', 'justify-content': 'flex-start' }}>
             <Navbar.Toggle aria-controls={`offcanvasNavbar-expand-${expand}`} />
-            <Navbar.Brand style={{ marginLeft: '-420px', marginTop: '-10px' }} href="#">Personal Storage Service</Navbar.Brand>
-
-            <Form className="d-flex align-items-end justify-content-end flex-row "
-              style={{ flexGrow: '0' }}>
-              <Form.Control
-                type="search"
-                placeholder="Search"
-                className="me-2"
-                aria-label="Search"
-                style={{ width: '400px', gap: '0' }}
-              />
-              <Button variant="outline-success"
-                style={{ width: '150px', margin: '2px' }}>Search</Button>
-            </Form>
+            <Navbar.Brand style={{ marginRight: "50px", marginTop: '-10px' }} href="#">Personal Storage Service</Navbar.Brand>
             <Navbar.Offcanvas
               id={`offcanvasNavbar-expand-${expand}`}
               aria-labelledby={`offcanvasNavbarLabel-expand-${expand}`}

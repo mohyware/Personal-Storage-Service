@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { Form, Button, Container } from 'react-bootstrap';
+import { Form, Button, Container, Spinner } from 'react-bootstrap';
 import axios from 'axios';
 
 function UploadFile({ currentFolder }) {
     const [file, setFile] = useState(null);
+    const [isLoading, setIsLoading] = useState(false);
 
     const handleFileChange = (event) => {
         setFile(event.target.files[0]);
@@ -16,18 +17,21 @@ function UploadFile({ currentFolder }) {
             formData.append('file', file);
             formData.append('name', file.name);
             formData.append('folderId', currentFolder.id);
+
+            setIsLoading(true);
             try {
-                const res = await axios.post(`/api/v1/file/cloud/upload`, formData, {
+                await axios.post(`/api/v1/file/cloud/upload`, formData, {
                     headers: {
                         'Content-Type': 'multipart/form-data'
                     },
                     withCredentials: true
                 });
-                console.log(res)
+                window.location.reload();
             } catch (err) {
-                console.log(err.response)
+                console.log(err.response);
+            } finally {
+                setIsLoading(false);
             }
-
         } else {
             console.log("No file selected");
         }
@@ -40,13 +44,31 @@ function UploadFile({ currentFolder }) {
                     <br></br>
                     <Form.Control type="file" onChange={handleFileChange} />
                 </Form.Group>
-                <Button variant="primary" type="submit" className="mt-3">
-                    Upload
+                <Button
+                    variant="primary"
+                    type="submit"
+                    className="mt-3"
+                    disabled={!file || isLoading}
+                >
+                    {isLoading ? (
+                        <>
+                            <Spinner
+                                as="span"
+                                animation="border"
+                                size="sm"
+                                role="status"
+                                aria-hidden="true"
+                                className="me-2"
+                            />
+                            Uploading...
+                        </>
+                    ) : (
+                        'Upload'
+                    )}
                 </Button>
             </Form>
         </Container>
     );
 }
 
-
-export default UploadFile
+export default UploadFile;

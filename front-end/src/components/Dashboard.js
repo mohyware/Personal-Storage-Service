@@ -14,9 +14,6 @@ function Dashboard({ currentFolder }) {
     if (!currentFolder)
         return;
 
-    if (currentFolder.subFolders.length < 1)
-        return (<p>This Folder is Empty</p>)
-
     return (
         <div>
             <Table responsive>
@@ -30,7 +27,7 @@ function Dashboard({ currentFolder }) {
                     </tr>
                 </thead>
                 <tbody>
-                    {currentFolder.subFolders.map((folder) => {
+                    {currentFolder.subFolders.length > 0 && currentFolder.subFolders.map((folder) => {
                         return (
                             <tr key={folder.id}>
                                 <td>{folder.id}</td>
@@ -45,7 +42,7 @@ function Dashboard({ currentFolder }) {
                             </tr>
                         )
                     })}
-                    {currentFolder.files.map((file) => {
+                    {currentFolder.files.length > 0 && currentFolder.files.map((file) => {
                         return (
                             <tr key={file.id}>
                                 <td>{file.id}</td>

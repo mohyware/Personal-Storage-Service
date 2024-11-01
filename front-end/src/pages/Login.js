@@ -5,6 +5,7 @@ import Button from 'react-bootstrap/Button';
 import Alert from 'react-bootstrap/Alert';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
+import CenteredContainer from "../components/CenteredContainer"
 
 import axios from 'axios';
 const LOGIN_URL = 'api/v1/auth/login';
@@ -66,48 +67,51 @@ const Login = () => {
     }
 
     return (
+        <CenteredContainer>
 
-        <section>
-            <div ref={errRef} className={`errmsg ${errVisible ? "active" : "hide"}`} >
-                <Alert key="warning" variant="danger">
-                    <FontAwesomeIcon icon={faInfoCircle} />
-                    <span> </span>
-                    {errMsg}
-                </Alert>
-            </div>
-            <h1>Sign In</h1>
-            <form onSubmit={handleSubmit}>
-                <label htmlFor="email">Email:</label>
-                <input
-                    type="email"
-                    id="email"
-                    ref={userRef}
-                    autoComplete="off"
-                    onChange={(e) => setEmail(e.target.value)}
-                    value={email}
-                    required
-                />
+            <section>
+                <div ref={errRef} className={`errmsg ${errVisible ? "active" : "hide"}`} >
+                    <Alert key="warning" variant="danger">
+                        <FontAwesomeIcon icon={faInfoCircle} />
+                        <span> </span>
+                        {errMsg}
+                    </Alert>
+                </div>
+                <h1>Sign In</h1>
+                <form onSubmit={handleSubmit}>
+                    <label htmlFor="email">Email:</label>
+                    <input
+                        type="email"
+                        id="email"
+                        ref={userRef}
+                        autoComplete="off"
+                        onChange={(e) => setEmail(e.target.value)}
+                        value={email}
+                        required
+                    />
 
-                <label htmlFor="password">Password:</label>
-                <input
-                    type="password"
-                    id="password"
-                    onChange={(e) => setPwd(e.target.value)}
-                    value={pwd}
-                    required
-                />
-                <br />
-                <button className="btn-success" >Sign In</button>
-            </form>
-            <p>
-                Need an Account?<br />
-                <span className="line">
-                    <Link to="/register" style={{ textDecoration: 'none' }}>
-                        <Button variant="primary">Sign Up</Button>
-                    </Link>
-                </span>
-            </p>
-        </section>
+                    <label htmlFor="password">Password:</label>
+                    <input
+                        type="password"
+                        id="password"
+                        onChange={(e) => setPwd(e.target.value)}
+                        value={pwd}
+                        required
+                    />
+                    <br />
+                    <button className="btn-success" >Sign In</button>
+                </form>
+                <p>
+                    Need an Account?<br />
+                    <span className="line">
+                        <Link to="/register" style={{ textDecoration: 'none' }}>
+                            <Button variant="primary">Sign Up</Button>
+                        </Link>
+                    </span>
+                </p>
+            </section>
+        </CenteredContainer>
+
     )
 }
 

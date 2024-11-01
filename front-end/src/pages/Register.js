@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from 'react-router-dom';
 import Alert from 'react-bootstrap/Alert';
 import Button from 'react-bootstrap/Button';
+import CenteredContainer from "../components/CenteredContainer"
 
 import './style.css'
 import axios from 'axios';
@@ -96,7 +97,7 @@ const Register = () => {
     }
 
     return (
-        <>
+        <CenteredContainer>
             <div id='form'>
                 {success ? (
                     <section>
@@ -213,7 +214,7 @@ const Register = () => {
                 )}
             </div>
 
-        </>
+        </CenteredContainer>
     )
 }
 

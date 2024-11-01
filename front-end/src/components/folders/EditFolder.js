@@ -3,7 +3,8 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
 import axios from 'axios';
-
+import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 function EditFolder(props) {
     const [show, setShow] = useState(false);
 
@@ -29,7 +30,7 @@ function EditFolder(props) {
     return (
         <>
             <Button variant="success" onClick={handleShow} >
-                Rename
+                <FontAwesomeIcon icon={faPenToSquare} />
             </Button>
 
             <Modal show={show} onHide={handleClose}>

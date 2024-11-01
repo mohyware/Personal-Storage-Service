@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import Button from 'react-bootstrap/Button';
-import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
 import axios from 'axios';
-
+import { faTrash } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 function DeleteFolder(props) {
     const [show, setShow] = useState(false);
 
@@ -22,7 +22,7 @@ function DeleteFolder(props) {
     return (
         <>
             <Button variant="danger" onClick={handleShow}>
-                Delete
+                <FontAwesomeIcon icon={faTrash} />
             </Button>
 
             <Modal show={show} onHide={handleClose}>

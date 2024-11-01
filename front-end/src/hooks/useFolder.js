@@ -1,5 +1,4 @@
 import { useReducer, useEffect } from "react"
-import useAuth from "../hooks/useAuth";
 import axios from 'axios';
 
 const ACTIONS = {
@@ -9,7 +8,7 @@ const ACTIONS = {
     SET_CHILD_FILES: "set-child-files",
 }
 
-export const ROOT_FOLDER = { name: "Root", id: null, path: [], subFolders: [], subFiles: [] }
+export const ROOT_FOLDER = { name: "Root", id: null, path: [], subFolders: [], files: [] }
 
 function reducer(state, { type, payload }) {
     switch (type) {
@@ -55,10 +54,13 @@ export function useFolder(folderId = null, folder = null) {
     useEffect(() => {
         const fetchFolderData = async () => {
             if (folderId === null) {
-                const response = await axios.get('/api/v1/folder/');
+                const response1 = await axios.get('/api/v1/folder/');
+                const response2 = await axios.get('/api/v1/file/');
+
                 const updatedRootFolder = {
                     ...ROOT_FOLDER,
-                    subFolders: response.data.folders
+                    subFolders: response1.data.folders,
+                    files: response2.data.files
                 };
 
                 dispatch({

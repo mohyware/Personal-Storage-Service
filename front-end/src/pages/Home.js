@@ -16,7 +16,7 @@ const Home = () => {
             <div className="grid-container">
                 <div className="item1">
                     <AddFolder currentFolder={folder} />
-                    <UploadFile />
+                    <UploadFile currentFolder={folder} />
                 </div>
                 <div className="item1">
                     <FolderBreadcrumbs currentFolder={folder} />

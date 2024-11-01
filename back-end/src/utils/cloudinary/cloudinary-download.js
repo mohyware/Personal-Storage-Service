@@ -24,7 +24,9 @@ const cloudDownload = async (req, res) => {
             method: 'GET',
             responseType: 'stream'
         });
-
+        res.status(StatusCodes.OK).json({ link: result });
+        return;
+        // download
         const writer = fs.createWriteStream('./downloaded_image.jpg');
         response.data.pipe(writer);
         writer.on('finish', () => console.log('File downloaded successfully.'));

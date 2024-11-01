@@ -111,7 +111,7 @@ const updateFile = async (req, res, next) => {
 };
 
 const deleteFile = async (req, res) => {
-    const { id: fileId } = req.params;
+    const { fileId } = req.params;
 
     await File.delete({
         where: { id: Number(fileId) },

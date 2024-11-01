@@ -1,10 +1,14 @@
 import Table from 'react-bootstrap/Table';
-import React, { useState, useEffect } from 'react';
-import { faFolder } from "@fortawesome/free-solid-svg-icons";
+import React from 'react';
+import { faFolder, faFile } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import EditFolder from "../components/folders/EditFolder";
 import DeleteFolder from "../components/folders/DeleteFolder";
 import ViewFolder from "../components/folders/ViewFolder";
+
+import EditFile from "../components/files/EditFile";
+import DeleteFile from "../components/files/DeleteFile";
+import ViewFile from "../components/files/ViewFile";
 
 function Dashboard({ currentFolder }) {
     if (!currentFolder)
@@ -31,13 +35,28 @@ function Dashboard({ currentFolder }) {
                             <tr key={folder.id}>
                                 <td>{folder.id}</td>
                                 <td>  <FontAwesomeIcon icon={faFolder} /></td>
-                                <td>{folder.name}</td>
+                                <td className="text-truncate" style={{ maxWidth: '160px' }}>{folder.name}</td>
                                 <td style={{ width: '10%' }}><div style={{ display: 'flex', gap: '10px' }}>
                                     <ViewFolder FolderId={folder.id} />
                                     <EditFolder FolderId={folder.id} FolderName={folder.name} ParentFolderId={folder.parentFolderId} />
                                     <DeleteFolder FolderId={folder.id} />
                                 </div></td>
                                 <td>{folder.createdAt}</td>
+                            </tr>
+                        )
+                    })}
+                    {currentFolder.files.map((file) => {
+                        return (
+                            <tr key={file.id}>
+                                <td>{file.id}</td>
+                                <td>  <FontAwesomeIcon icon={faFile} /></td>
+                                <td className="text-truncate" style={{ maxWidth: '160px' }} >{file.name}</td>
+                                <td style={{ width: '10%' }}><div style={{ display: 'flex', gap: '10px' }}>
+                                    <ViewFile fileId={file.id} />
+                                    <EditFile fileId={file.id} fileName={file.name} folderId={file.folderId} />
+                                    <DeleteFile fileId={file.id} />
+                                </div></td>
+                                <td>{file.createdAt}</td>
                             </tr>
                         )
                     })}

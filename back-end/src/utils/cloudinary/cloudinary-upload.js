@@ -1,15 +1,16 @@
-const cloudinary = require('../../config/Cloudinary')
-const path = require('path');
+const cloudinary = require('../../config/Cloudinary');
 const { BadRequestError } = require('../../errors');
 
 const cloudUpload = async (req, res, next) => {
     try {
+        // Check if a file was uploaded
         if (!req.file) {
             throw new BadRequestError("No file was uploaded");
         }
 
-        const { buffer, originalname } = req.file;
+        const { buffer, originalname } = req.file; // Extract buffer and original filename
 
+        // Define upload options
         const options = {
             resource_type: 'auto', // Automatically detect resource type
             use_filename: true,
@@ -18,39 +19,28 @@ const cloudUpload = async (req, res, next) => {
             public_id: originalname.split('.')[0] // Optional: use the original name without extension
         };
 
-        const result = await cloudinary.uploader.upload_stream(options, (error, result) => {
-            if (error) {
-                return next(error);
-            }
-            req.body.public_id = result.public_id;
-            res.locals.customData = {
-                message: "Uploaded to Cloudinary successfully",
-                public_id: result.public_id,
-            };
-            next();
-        });
-
         // Create a stream to upload the buffer to Cloudinary
         const stream = cloudinary.uploader.upload_stream(options, (error, result) => {
             if (error) {
-                return next(error);
+                return next(error); // Handle any errors
             }
+
+            // Store the public ID in the request body
             req.body.public_id = result.public_id;
             res.locals.customData = {
                 message: "Uploaded to Cloudinary successfully",
                 public_id: result.public_id,
             };
-            next();
+            next(); // Proceed to the next middleware
         });
 
         // Pass the buffer to the stream
-        stream.end(buffer);
+        stream.end(buffer); // End the stream with the buffer
 
     } catch (error) {
-        console.log(error); // Log the error for debugging
-        next(error);
+        console.error(error); // Log the error for debugging
+        next(error); // Pass the error to the next middleware
     }
 };
-
 
 module.exports = cloudUpload;

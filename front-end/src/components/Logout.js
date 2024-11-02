@@ -34,17 +34,16 @@ const Logout = () => {
                 keyboard={false}
             >
                 <Modal.Header closeButton>
-                    <Modal.Title>Modal title</Modal.Title>
+                    <Modal.Title>Log out</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    I will not close if you click outside me. Do not even try to press
-                    escape key.
+                    Are You sure You Want to Log out?
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="outline-secondary" onClick={handleClose}>
                         Close
                     </Button>
-                    <Button variant="danger" onClick={logout}>Understood</Button>
+                    <Button variant="danger" onClick={logout}>Logout</Button>
                 </Modal.Footer>
             </Modal>
         </>

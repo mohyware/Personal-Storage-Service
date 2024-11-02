@@ -34,17 +34,16 @@ const DeleteAccount = () => {
                 keyboard={false}
             >
                 <Modal.Header closeButton>
-                    <Modal.Title>Modal title</Modal.Title>
+                    <Modal.Title>Account Deletion</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    I will not close if you click outside me. Do not even try to press
-                    escape key.
+                    Are You sure You Want to Delete Your Account?
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="outline-secondary" onClick={handleClose}>
                         Close
                     </Button>
-                    <Button variant="danger" onClick={deleteAccount}>Understood</Button>
+                    <Button variant="danger" onClick={deleteAccount}>Delete</Button>
                 </Modal.Footer>
             </Modal>
         </>

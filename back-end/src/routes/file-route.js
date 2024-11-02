@@ -22,6 +22,6 @@ router.get('/:fileId', getFileById)
 router.patch('/:fileId', updateFile);
 router.delete('/:fileId', deleteFile)
 // for local
-router.post('/local/upload', upload, createFile)
-router.get('/local/download/:fileId', getFileById, download) // to active remove response in getFileById controller
+//router.post('/local/upload', upload, createFile)
+//router.get('/local/download/:fileId', getFileById, download) // to active remove response in getFileById controller
 module.exports = router

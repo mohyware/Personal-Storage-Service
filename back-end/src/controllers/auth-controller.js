@@ -45,6 +45,7 @@ const login = async (req, res, next) => {
             httpOnly: true,
             secure: true,
             maxAge: cookieMaxAge,
+            sameSite: 'None'
         });
         res.status(StatusCodes.OK).json({ user: { userName: user.userName }, token })
     } catch (error) {

@@ -5,7 +5,7 @@ import Modal from 'react-bootstrap/Modal';
 import axios from '../../api/axios'; import { faFilePen } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-function EditFile(props) {
+function UpdateFile(props) {
     const [show, setShow] = useState(false);
 
     const handleClose = () => setShow(false);
@@ -65,4 +65,4 @@ function EditFile(props) {
     );
 }
 
-export default EditFile;
+export default UpdateFile;

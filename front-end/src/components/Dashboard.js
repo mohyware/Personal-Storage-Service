@@ -3,13 +3,14 @@ import React, { useState, useEffect } from 'react';
 import { Spinner } from 'react-bootstrap';
 import { faFolder, faFile } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import UpdateFile from "./files/UpdateFile";
+import DeleteFile from "../components/files/DeleteFile";
+import ViewFile from "../components/files/ViewFile";
+
 import EditFolder from "../components/folders/EditFolder";
 import DeleteFolder from "../components/folders/DeleteFolder";
 import ViewFolder from "../components/folders/ViewFolder";
 
-import EditFile from "../components/files/EditFile";
-import DeleteFile from "../components/files/DeleteFile";
-import ViewFile from "../components/files/ViewFile";
 
 function Dashboard({ currentFolder, refetchFolderData }) {
     const [isLoading, setIsLoading] = useState(true);
@@ -24,7 +25,7 @@ function Dashboard({ currentFolder, refetchFolderData }) {
     if (!currentFolder) {
         return (
             <div className="d-flex justify-content-center align-items-center" style={{ height: '200px' }}>
-                <Spinner animation="border" role="status">
+                <Spinner animation="grow" role="status">
                     <span className="visually-hidden">Loading...</span>
                 </Spinner>
             </div>
@@ -115,7 +116,7 @@ function Dashboard({ currentFolder, refetchFolderData }) {
                             <td style={{ width: '10%' }}>
                                 <div style={{ display: 'flex', gap: '10px' }}>
                                     <ViewFile fileId={file.id} />
-                                    <EditFile
+                                    <UpdateFile
                                         fileId={file.id}
                                         fileName={file.name}
                                         folderId={file.folderId}

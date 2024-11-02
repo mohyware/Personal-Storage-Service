@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Navigate, Outlet, useLocation } from 'react-router-dom';
 import axios from '../api/axios'; import useAuth from "../hooks/useAuth";
+import Spinner from 'react-bootstrap/Spinner';
 
 const ProtectedRoute = () => {
     const [isAuthenticated, setIsAuthenticated] = useState(null);
@@ -26,7 +27,9 @@ const ProtectedRoute = () => {
     }, []);
 
     if (loading) {
-        return <div>Loading...</div>;
+        return <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+            <Spinner animation="grow" />
+        </div>;
     }
 
     if (!isAuthenticated) {

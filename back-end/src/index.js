@@ -3,7 +3,6 @@ const express = require('express')
 const app = express()
 const cookieParser = require('cookie-parser');
 
-app.use(express.static('./src/views'))
 // middleware
 const auth = require('./middleware/auth')
 const errorHandlerMiddleware = require('./middleware/error-handler')

@@ -32,7 +32,7 @@ function UploadFile({ currentFolder, refetchFolderData }) {
                     fileInputRef.current.value = "";
                 }
             } catch (err) {
-                console.log(err.response);
+                console.log(err);
             } finally {
                 setIsLoading(false);
                 setFile(null);

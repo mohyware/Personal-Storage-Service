@@ -1,8 +1,7 @@
 import { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import axios from '../api/axios'; import { useNavigate } from 'react-router-dom';
 
 
 const DeleteAccount = () => {

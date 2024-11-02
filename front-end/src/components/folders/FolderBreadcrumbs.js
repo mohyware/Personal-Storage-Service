@@ -2,8 +2,7 @@ import React from "react"
 import { Breadcrumb } from "react-bootstrap"
 import { Link } from "react-router-dom"
 import { ROOT_FOLDER } from "../../hooks/useFolder"
-import axios from 'axios';
-import { useEffect, useState } from "react"
+import axios from '../../api/axios'; import { useEffect, useState } from "react"
 
 export default function FolderBreadcrumbs({ currentFolder }) {
     const [path, setPath] = useState(currentFolder === ROOT_FOLDER ? [ROOT_FOLDER] : []);

@@ -2,8 +2,7 @@ import { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
-import axios from 'axios';
-import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
+import axios from '../../api/axios'; import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 function EditFolder(props) {
     const [show, setShow] = useState(false);

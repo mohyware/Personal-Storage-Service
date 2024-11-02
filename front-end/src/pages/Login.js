@@ -7,8 +7,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import CenteredContainer from "../components/CenteredContainer"
 
-import axios from 'axios';
-const LOGIN_URL = 'api/v1/auth/login';
+import axios from '../api/axios';
+const LOGIN_URL = '/api/v1/auth/login';
 
 const Login = () => {
     const userRef = useRef();

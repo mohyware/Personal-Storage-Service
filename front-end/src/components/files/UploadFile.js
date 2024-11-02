@@ -1,7 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { Form, Button, Container, Spinner } from 'react-bootstrap';
-import axios from 'axios';
-
+import axios from '../../api/axios';
 function UploadFile({ currentFolder, refetchFolderData }) {
     const [file, setFile] = useState(null);
     const [isLoading, setIsLoading] = useState(false);

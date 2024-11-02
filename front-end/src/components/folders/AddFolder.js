@@ -2,8 +2,7 @@ import { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
-import axios from 'axios';
-
+import axios from '../../api/axios';
 function AddFolder({ currentFolder, refetchFolderData }) {
     const [show, setShow] = useState(false);
 

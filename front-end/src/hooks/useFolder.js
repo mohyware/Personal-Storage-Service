@@ -1,6 +1,5 @@
 import { useReducer, useEffect, useCallback } from "react"
-import axios from 'axios';
-
+import axios from '../api/axios';
 const ACTIONS = {
     SELECT_FOLDER: "select-folder",
     UPDATE_FOLDER: "update-folder",

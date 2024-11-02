@@ -1,6 +1,5 @@
 import Button from 'react-bootstrap/Button';
-import axios from 'axios';
-import { faEye, faSpinner } from "@fortawesome/free-solid-svg-icons";
+import axios from '../../api/axios'; import { faEye, faSpinner } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useState } from 'react';
 

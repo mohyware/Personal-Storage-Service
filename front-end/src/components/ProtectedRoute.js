@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Navigate, Outlet, useLocation } from 'react-router-dom';
-import axios from 'axios';
-import useAuth from "../hooks/useAuth";
+import axios from '../api/axios'; import useAuth from "../hooks/useAuth";
 
 const ProtectedRoute = () => {
     const [isAuthenticated, setIsAuthenticated] = useState(null);

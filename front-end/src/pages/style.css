@@ -104,7 +104,9 @@ button {
 .hide {
     display: none;
 }
-
+.navbar-toggler {
+  margin-right: 0 !important; /* Remove the right margin */
+}
 .valid {
     color: limegreen;
     margin-left: 0.25rem;

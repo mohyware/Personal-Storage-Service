@@ -37,13 +37,13 @@ export function useFolder(folderId = null, folder = null) {
             if (folderId === null) {
                 const response1 = await axios.get('/api/v1/folder/');
                 const response2 = await axios.get('/api/v1/file/');
-
+                const folders = response1.data.folders;
+                const files = response2.data.files;
                 const updatedRootFolder = {
                     ...ROOT_FOLDER,
-                    subFolders: response1.data.folders,
-                    files: response2.data.files
+                    subFolders: folders.filter(folder => folder.parentFolderId === null),
+                    files: files.filter(file => file.folderId === null)
                 };
-
                 dispatch({
                     type: ACTIONS.UPDATE_FOLDER,
                     payload: { folder: updatedRootFolder }
@@ -54,7 +54,6 @@ export function useFolder(folderId = null, folder = null) {
                     type: ACTIONS.UPDATE_FOLDER,
                     payload: { folder: res.data.folder },
                 });
-                console.log(res.data.folder)
             }
         } catch (error) {
             dispatch({

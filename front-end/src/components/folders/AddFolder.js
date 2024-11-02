@@ -10,8 +10,6 @@ function AddFolder({ currentFolder, refetchFolderData }) {
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
     const [folder, setFolder] = useState('');
-    if (currentFolder === null)
-        return;
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
@@ -24,14 +22,14 @@ function AddFolder({ currentFolder, refetchFolderData }) {
             );
             refetchFolderData();
             setFolder('');
+            handleClose();
         } catch (err) {
             console.log(err)
         }
-        handleClose();
     }
     return (
         <>
-            <Button variant="success" onClick={handleShow} style={{ marginLeft: "19px", width: "85%" }}>
+            <Button variant="success" onClick={handleShow} style={{ marginLeft: "19px", width: "90%" }}>
                 + Add New Folder
             </Button>
 

@@ -36,14 +36,13 @@ export default function FolderBreadcrumbs({ currentFolder }) {
             className="flex-grow-1"
             listProps={{ className: " pl-0 m-0" }}
         >
-            {path.map((folder, index) => (
+            {path.map((folder) => (
                 <Breadcrumb.Item
                     key={folder.id}
                     linkAs={Link}
                     linkProps={{
                         to: {
                             pathname: folder.id ? `/folder/${folder.id}` : "/",
-                            state: { folder: { ...folder, path: path.slice(1, index) } },
                         },
                     }}
                     className="text-truncate d-inline-block"

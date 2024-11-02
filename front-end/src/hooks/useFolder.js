@@ -6,7 +6,7 @@ const ACTIONS = {
     UPDATE_FOLDER: "update-folder",
 }
 
-export const ROOT_FOLDER = { name: "Root", id: null, path: [], subFolders: [], files: [] }
+export const ROOT_FOLDER = { name: "Root", id: null, subFolders: [], files: [] }
 
 function reducer(state, { type, payload }) {
     switch (type) {

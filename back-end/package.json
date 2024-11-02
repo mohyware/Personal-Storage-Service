@@ -10,7 +10,8 @@
   "scripts": {
     "start": "node src/index.js",
     "dev": "nodemon src/index.js",
-    "build":"npx prisma generate"
+    "build":"npx prisma generate",
+    "postinstall":"prisma generate"
   },
   "keywords": [],
   "author": "",

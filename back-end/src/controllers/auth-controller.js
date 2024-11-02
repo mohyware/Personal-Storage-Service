@@ -42,8 +42,8 @@ const login = async (req, res, next) => {
         const cookieMaxAge = Number(process.env.COOKIE_MAX_AGE) || 3600000;
         const token = createJWT(user)
         res.cookie('jwt', token, {
-            httpOnly: process.env.NODE_ENV !== 'production',
-            secure: process.env.NODE_ENV === 'production',
+            httpOnly: true,
+            secure: true,
             maxAge: cookieMaxAge,
         });
         res.status(StatusCodes.OK).json({ user: { userName: user.userName }, token })
@@ -58,9 +58,9 @@ const getStatus = (req, res) => {
 
 const logout = (req, res) => {
     res.clearCookie('jwt', {
-        httpOnly: process.env.NODE_ENV !== 'production',
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'Strict',
+        httpOnly: true,
+        secure: true,
+        sameSite: 'None',
     });
     res.status(StatusCodes.OK).json({ message: "Logged out successfully" });
 };

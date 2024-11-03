@@ -15,12 +15,20 @@ const getUser = async (req, res) => {
     res.status(StatusCodes.OK).json({ user })
 }
 
-const deleteUser = async (req, res) => {
+const deleteUser = async (req, res, next) => {
     const {
         user: { id: userId }
     } = req
-    await User.delete({ where: { id: userId } });
-    res.status(StatusCodes.OK).json({ message: "User deleted successfully" })
+    try {
+        const user = await User.find({ where: { id: userId } });
+        if (user.email === 'example@gmail.com') {
+            throw new BadRequestError('Cant Delete this example mail')
+        }
+        await User.delete({ where: { id: userId } });
+        res.status(StatusCodes.OK).json({ message: "User deleted successfully" })
+    } catch (err) {
+        next(err);
+    }
 
 }
 const updateUser = async (req, res, next) => {

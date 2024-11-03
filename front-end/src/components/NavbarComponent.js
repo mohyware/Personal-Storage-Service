@@ -38,15 +38,9 @@ function NavbarComponent() {
                   </div>
                   <div style={{ display: "flex", gap: "30px" }}>
                     <Nav.Link as={Logout} to="/Login" >Logout</Nav.Link>
-                    {
-                      auth.userName === 'example' ?
-                        <Button variant="danger" disabled={true}
-                          title="You cannot delete this example account"
-                        >Delete Account</Button> :
-                        <Nav.Link as={DeleteAccount} to="/Login"
-                          style={{ marginTop: "30px" }}>
-                          Delete Account</Nav.Link>
-                    }
+                    <Nav.Link as={DeleteAccount} to="/Login"
+                      style={{ marginTop: "30px" }}>
+                      Delete Account</Nav.Link>
                   </div>
                 </Nav>
               </Offcanvas.Body>

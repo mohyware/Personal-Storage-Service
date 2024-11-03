@@ -4,9 +4,12 @@ import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
 import axios from '../../api/axios'; import { faFilePen } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import AlertErr from '../AlertErr';
+import { getErrorMessage } from '../../utils/errorHandler';
 
 function UpdateFile(props) {
     const [show, setShow] = useState(false);
+    const [errMsg, setErrMsg] = useState('');
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
@@ -23,13 +26,16 @@ function UpdateFile(props) {
                 }
             );
         } catch (err) {
-            console.log(err.response)
+            handleClose();
+            const errorMessage = getErrorMessage(err);
+            setErrMsg(errorMessage);
         }
         props.refetchFolderData();
         handleClose();
     }
     return (
         <>
+            <AlertErr errMsg={errMsg} setErrMsg={setErrMsg} />
             <Button variant="success" onClick={handleShow} >
                 <FontAwesomeIcon icon={faFilePen} />
             </Button>

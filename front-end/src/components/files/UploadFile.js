@@ -9,7 +9,6 @@ function UploadFile({ currentFolder, refetchFolderData }) {
     const [isLoading, setIsLoading] = useState(false);
     const fileInputRef = useRef(null);
     const [errMsg, setErrMsg] = useState('');
-    const errRef = useRef();
 
     const handleFileChange = (event) => {
 
@@ -53,7 +52,7 @@ function UploadFile({ currentFolder, refetchFolderData }) {
 
     return (
         <>
-            <AlertErr errMsg={errMsg} errCall={errRef} setErrMsg={setErrMsg} />
+            <AlertErr errMsg={errMsg} setErrMsg={setErrMsg} />
             <Container style={{ margin: "0", maxWidth: "360px" }}>
                 <Form onSubmit={handleSubmit} >
                     <Form.Group controlId="formFile" >

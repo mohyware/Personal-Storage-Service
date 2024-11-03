@@ -5,12 +5,14 @@ import Button from 'react-bootstrap/Button';
 import CenteredContainer from "../components/CenteredContainer"
 import { getErrorMessage } from '../utils/errorHandler';
 import AlertErr from '../components/AlertErr';
+import { Spinner } from 'react-bootstrap';
 
 import axios from '../api/axios';
 const LOGIN_URL = '/api/v1/auth/login';
 
 const Login = () => {
     const userRef = useRef();
+    const [isLoading, setIsLoading] = useState(false);
 
     const navigate = useNavigate();
     const location = useLocation();
@@ -26,6 +28,7 @@ const Login = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setIsLoading(true);
 
         try {
             await axios.post(LOGIN_URL,
@@ -46,6 +49,8 @@ const Login = () => {
             };
             const errorMessage = getErrorMessage(err, customMessages);
             setErrMsg(errorMessage);
+        } finally {
+            setIsLoading(false);
         }
     }
 
@@ -75,7 +80,25 @@ const Login = () => {
                         required
                     />
                     <br />
-                    <button className="btn-success" >Sign In</button>
+                    <button className="btn-success"
+                        disabled={isLoading}
+                    >
+                        {isLoading ? (
+                            <>
+                                <Spinner
+                                    as="span"
+                                    animation="border"
+                                    size="sm"
+                                    role="status"
+                                    aria-hidden="true"
+                                    className="me-2"
+                                />
+                                Signing in...
+                            </>
+                        ) : (
+                            'Sign in'
+                        )}
+                    </button>
                 </form>
                 <p>
                     Need an Account?<br />

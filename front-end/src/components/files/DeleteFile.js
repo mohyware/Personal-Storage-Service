@@ -3,8 +3,12 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import axios from '../../api/axios'; import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import AlertErr from '../AlertErr';
+import { getErrorMessage } from '../../utils/errorHandler';
+
 function DeleteFile(props) {
     const [show, setShow] = useState(false);
+    const [errMsg, setErrMsg] = useState('');
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
@@ -14,13 +18,17 @@ function DeleteFile(props) {
         try {
             await axios.delete(`/api/v1/file/${props.fileId}`);
         } catch (err) {
-            console.log(err.response)
+            handleClose();
+            const errorMessage = getErrorMessage(err);
+            setErrMsg(errorMessage);
         }
         props.refetchFolderData();
         handleClose();
     }
     return (
         <>
+            <AlertErr errMsg={errMsg} setErrMsg={setErrMsg} />
+
             <Button variant="danger" onClick={handleShow}>
                 <FontAwesomeIcon icon={faTrash} />
 

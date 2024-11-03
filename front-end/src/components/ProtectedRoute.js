@@ -2,12 +2,14 @@ import { useState, useEffect } from 'react';
 import { Navigate, Outlet, useLocation } from 'react-router-dom';
 import axios from '../api/axios'; import useAuth from "../hooks/useAuth";
 import Spinner from 'react-bootstrap/Spinner';
-
+import AlertErr from '../../src/components/AlertErr';
+import { getErrorMessage } from '../../src/utils/errorHandler';
 const ProtectedRoute = () => {
     const [isAuthenticated, setIsAuthenticated] = useState(null);
     const [loading, setLoading] = useState(true);
     const { setAuth } = useAuth();
     const location = useLocation();
+    const [errMsg, setErrMsg] = useState('');
 
     useEffect(() => {
         axios('/api/v1/user', {
@@ -19,8 +21,9 @@ const ProtectedRoute = () => {
                 setAuth(response.data.user)
                 setLoading(false);
             })
-            .catch((error) => {
-                console.error('Error checking authentication status:', error);
+            .catch((err) => {
+                const errorMessage = getErrorMessage(err);
+                setErrMsg(errorMessage);
                 setIsAuthenticated(false);
                 setLoading(false);
             });
@@ -33,7 +36,10 @@ const ProtectedRoute = () => {
     }
 
     if (!isAuthenticated) {
-        return <Navigate to="/login" state={{ from: location }} replace />
+        return <>
+            <AlertErr errMsg={errMsg} setErrMsg={setErrMsg} />
+            <Navigate to="/login" state={{ from: location }} replace />
+        </>
     }
 
     return <Outlet />;

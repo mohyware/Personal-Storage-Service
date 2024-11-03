@@ -79,7 +79,11 @@ button {
     cursor: pointer;
     transition: background-color 0.3s;
 }
-
+.btn-success:disabled {
+  background-color: #226949;  
+  cursor: not-allowed; 
+  opacity: 0.6;  
+}
 .btn-success:hover {
     background-color: #218838; /* Darker green on hover */
 }
@@ -125,6 +129,30 @@ button {
     display: none;
 }
 .errmsg.active {
+    display: block; 
+  }
+.successAlert {
+    position: fixed; 
+    top: 10px; 
+    right: 10px; 
+    z-index: 2000; 
+    display: none;
+}
+.successAlert.active {
+  position: fixed; 
+  top: 10px; 
+  right: 10px; 
+  z-index: 2000; 
+    display: block; 
+  }
+.warn {
+    position: fixed; 
+    top: 10px; 
+    right: 10px; 
+    z-index: 2000; 
+    display: none;
+}
+.warn.active {
     display: block; 
   }
 .line {

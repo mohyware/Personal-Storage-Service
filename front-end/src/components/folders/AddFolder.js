@@ -3,9 +3,12 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
 import axios from '../../api/axios';
+import AlertErr from '../AlertErr';
+import { getErrorMessage } from '../../utils/errorHandler';
+
 function AddFolder({ currentFolder, refetchFolderData }) {
     const [show, setShow] = useState(false);
-
+    const [errMsg, setErrMsg] = useState('');
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
     const [folder, setFolder] = useState('');
@@ -21,13 +24,16 @@ function AddFolder({ currentFolder, refetchFolderData }) {
             );
             refetchFolderData();
             setFolder('');
-            handleClose();
         } catch (err) {
-            console.log(err)
+            handleClose();
+            const errorMessage = getErrorMessage(err);
+            setErrMsg(errorMessage);
         }
+        handleClose();
     }
     return (
         <>
+            <AlertErr errMsg={errMsg} setErrMsg={setErrMsg} />
             <Button variant="success" onClick={handleShow} style={{ marginLeft: "19px", width: "90%" }}>
                 + Add New Folder
             </Button>

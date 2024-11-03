@@ -2,10 +2,12 @@ import Button from 'react-bootstrap/Button';
 import axios from '../../api/axios'; import { faEye, faSpinner } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useState } from 'react';
+import AlertErr from '../AlertErr';
+import { getErrorMessage } from '../../utils/errorHandler';
 
 function ViewFile(props) {
     const [isLoading, setIsLoading] = useState(false);
-
+    const [errMsg, setErrMsg] = useState('');
     const handleSubmit = async () => {
         setIsLoading(true);
         try {
@@ -16,13 +18,15 @@ function ViewFile(props) {
                 console.log("Download link not found");
             }
         } catch (err) {
-            console.log(err.response)
+            const errorMessage = getErrorMessage(err);
+            setErrMsg(errorMessage);
         } finally {
             setIsLoading(false);
         }
     }
     return (
         <>
+            <AlertErr errMsg={errMsg} setErrMsg={setErrMsg} />
             <Button variant="info" onClick={handleSubmit} disabled={isLoading}            >
                 {isLoading ? (
                     <FontAwesomeIcon icon={faSpinner} spin />

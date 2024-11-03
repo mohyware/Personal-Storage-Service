@@ -4,9 +4,12 @@ import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
 import axios from '../../api/axios'; import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import AlertErr from '../AlertErr';
+import { getErrorMessage } from '../../utils/errorHandler';
+
 function EditFolder(props) {
     const [show, setShow] = useState(false);
-
+    const [errMsg, setErrMsg] = useState('');
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
     const [folder, setFolder] = useState('');
@@ -24,12 +27,15 @@ function EditFolder(props) {
             props.refetchFolderData();
             setFolder('')
         } catch (err) {
-            console.log(err.response)
+            handleClose();
+            const errorMessage = getErrorMessage(err);
+            setErrMsg(errorMessage);
         }
         handleClose();
     }
     return (
         <>
+            <AlertErr errMsg={errMsg} setErrMsg={setErrMsg} />
             <Button variant="success" onClick={handleShow} >
                 <FontAwesomeIcon icon={faPenToSquare} />
             </Button>

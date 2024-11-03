@@ -6,6 +6,9 @@ export const getErrorMessage = (err, customMessages = {}) => {
             return customMessages[status];
         }
 
+        if (status === 401) {
+            return 'Unauthorized access. Please log in to continue.';
+        }
         if (status === 404) {
             return 'The requested resource was not found. Please check the URL and try again.';
         }

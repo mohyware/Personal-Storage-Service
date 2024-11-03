@@ -63,9 +63,11 @@ app.use('/api/v1/file', auth, fileRouter);
 app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);
 // for vercel deployment
-/* const port = process.env.PORT;
-app.listen(port, () => {
-    console.log(`app listening at http://localhost:${port}`)
-}) */
+if (process.env.NODE_ENV === "dev") {
+    const port = process.env.PORT;
+    app.listen(port, () => {
+        console.log(`app listening at http://localhost:${port}`)
+    })
+}
 
 module.exports = app;

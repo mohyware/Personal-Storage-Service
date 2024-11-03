@@ -5,9 +5,12 @@ import { Link } from 'react-router-dom';
 import Alert from 'react-bootstrap/Alert';
 import Button from 'react-bootstrap/Button';
 import CenteredContainer from "../components/CenteredContainer"
-
+import { Spinner } from 'react-bootstrap';
+import AlertWelcome from "../components/AlertWelcome";
 import './style.css'
 import axios from '../api/axios';
+import { getErrorMessage } from '../../src/utils/errorHandler';
+import AlertErr from "../components/AlertErr";
 const USER_REGEX = /^[A-z][A-z0-9-_]{3,23}$/;
 const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
 const EMAIL_REGEX = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -18,6 +21,7 @@ const Register = () => {
     const userRef = useRef();
     const errRef = useRef();
 
+    const [isLoading, setIsLoading] = useState(false);
     const [user, setUser] = useState('');
     const [validName, setValidName] = useState(false);
     const [userFocus, setUserFocus] = useState(false);
@@ -30,8 +34,10 @@ const Register = () => {
     const [validEmail, setValidEmail] = useState(false);
     const [emailFocus, setEmailFocus] = useState(false);
 
+
+    const [errAlert, setErrAlert] = useState('');
     const [errMsg, setErrMsg] = useState('');
-    const [success, setSuccess] = useState(false);
+    const [success, setSuccess] = useState('');
 
     const [errVisible, setErrVisible] = useState(false);
 
@@ -57,6 +63,7 @@ const Register = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setIsLoading(true);
         // if button enabled with JS hack
         const v1 = USER_REGEX.test(user);
         const v2 = PWD_REGEX.test(pwd);
@@ -72,47 +79,28 @@ const Register = () => {
                     withCredentials: true
                 }
             );
-            setSuccess(true);
+            setSuccess('show');
             //clear state and controlled inputs
             //need value attrib on inputs for this
             setUser('');
             setPwd('');
             setEmail('');
         } catch (err) {
-            if (!err?.response) {
-                setErrMsg('No Server Response');
-            } else if (err.response?.status === 409) {
-                setErrMsg(`${err.response.data.msg}`);
-            } else {
-                setErrMsg(`${err.response.data.msg}`);
-            }
-            setErrVisible(true);
-            const timer = setTimeout(() => {
-                setErrVisible(false);
-            }, 2000);
-            return () => clearTimeout(timer);
+            console.log(errAlert)
+            const errorMessage = getErrorMessage(err);
+            setErrAlert(errorMessage);
+        } finally {
+            setIsLoading(false);
         }
     }
 
     return (
-        <CenteredContainer>
-            <div id='form'>
-                {success ? (
+        <>
+            <AlertErr errMsg={errAlert} setErrMsg={setErrAlert} />
+            <AlertWelcome showAlert={success} setAlert={setSuccess} />
+            <CenteredContainer>
+                <div id='form'>
                     <section>
-                        <h1>Success!</h1>
-                        <p>
-                            <Link to="/login">Sign In</Link>
-                        </p>
-                    </section>
-                ) : (
-                    <section>
-                        <div ref={errRef} className={`errmsg ${errVisible ? "active" : "hide"}`} >
-                            <Alert key="warning" variant="danger">
-                                <FontAwesomeIcon icon={faInfoCircle} />
-                                <span> </span>
-                                {errMsg}
-                            </Alert>
-                        </div>
                         <h1>Register</h1>
                         <form onSubmit={handleSubmit}>
                             <label htmlFor="username">
@@ -136,7 +124,7 @@ const Register = () => {
                                 onBlur={() => setUserFocus(false)}
                             />
                             <div id="uidnote" className={`uidnote ${userFocus && user && !validName ? "active" : "offscreen"}`}>
-                                <Alert key="warning" variant="danger">
+                                <Alert key="warning" variant="warning">
                                     <FontAwesomeIcon icon={faInfoCircle} />
                                     <span> </span>
                                     4 to 24 characters.<br />
@@ -165,7 +153,7 @@ const Register = () => {
                                 onBlur={() => setEmailFocus(false)}
                             />
                             <div id="emailNote" className={`emailNote ${emailFocus && email && !validEmail ? "active" : "offscreen"}`}>
-                                <Alert key="warning" variant="danger">
+                                <Alert key="warning" variant="warning">
                                     <FontAwesomeIcon icon={faInfoCircle} /><span> </span>
                                     Please enter a valid email
                                 </Alert>
@@ -188,7 +176,7 @@ const Register = () => {
                                 onBlur={() => setPwdFocus(false)}
                             />
                             <div id="pwdnote" className={`pwdnote ${pwdFocus && !validPwd ? "active" : "offscreen"}`}>
-                                <Alert key="warning" variant="danger">
+                                <Alert key="warning" variant="warning">
                                     <FontAwesomeIcon icon={faInfoCircle} />
                                     <span> </span>
                                     8 to 24 characters.<br />
@@ -198,7 +186,22 @@ const Register = () => {
                                 </Alert>
                             </div>
                             <br />
-                            <button className="btn-success" disabled={!validName || !validPwd || !validEmail ? true : false}>Sign Up</button>
+                            <button className="btn-success" disabled={isLoading || !validName || !validPwd || !validEmail ? true : false}>
+                                {isLoading ? (
+                                    <>
+                                        <Spinner
+                                            as="span"
+                                            animation="border"
+                                            size="sm"
+                                            role="status"
+                                            aria-hidden="true"
+                                            className="me-2"
+                                        />
+                                        Creating Account...
+                                    </>
+                                ) : (
+                                    'Sign Up'
+                                )}</button>
                         </form>
                         <p>
                             Already registered?<br />
@@ -209,10 +212,10 @@ const Register = () => {
                             </span>
                         </p>
                     </section>
-                )}
-            </div>
+                </div>
 
-        </CenteredContainer>
+            </CenteredContainer>
+        </>
     )
 }
 

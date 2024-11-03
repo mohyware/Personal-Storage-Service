@@ -14,7 +14,7 @@ const download = require("../middleware/downloadLocal")
 const cloudUpload = require('../utils/cloudinary/cloudinary-upload')
 const cloudDownload = require('../utils/cloudinary/cloudinary-download')
 // in cloud
-router.post('/cloud/upload', cloudUpload, createFile)
+router.post('/cloud/upload', upload, cloudUpload, createFile)
 router.get('/cloud/download/:fileId', cloudDownload)
 // in database
 router.get('/', getUserFiles)

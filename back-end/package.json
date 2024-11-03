@@ -10,8 +10,8 @@
   "scripts": {
     "start": "node src/index.js",
     "dev": "nodemon src/index.js",
-    "build":"npx prisma generate",
-    "postinstall":"prisma generate"
+    "build": "npx prisma generate",
+    "postinstall": "prisma generate"
   },
   "keywords": [],
   "author": "",
@@ -34,6 +34,7 @@
     "nodemon": "^3.1.7",
     "passport": "^0.7.0",
     "passport-jwt": "^4.0.1",
+    "streamifier": "^0.1.1",
     "xss-clean": "^0.1.4"
   },
   "prisma": {

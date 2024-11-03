@@ -69,6 +69,10 @@ const updateFolder = async (req, res, next) => {
     const { folderId: folderId } = req.params;
     const { name, parentFolderId } = req.body;
     try {
+        // check name is not empty
+        if (!name) {
+            throw new BadRequestError("no name was provided");
+        }
         // check folder exist or not
         const oldFolder = await Folder.findUnique({ where: { id: Number(folderId) } });
         if (!oldFolder) {

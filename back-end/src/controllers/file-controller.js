@@ -86,6 +86,10 @@ const updateFile = async (req, res, next) => {
     const { fileId } = req.params;
     const { name, folderId } = req.body;
     try {
+        // check name is not empty
+        if (!name) {
+            throw new BadRequestError("no name was provided");
+        }
         // check file exist or not
         const oldFile = await File.findUnique({ where: { id: Number(fileId) } });
         if (!oldFile) {

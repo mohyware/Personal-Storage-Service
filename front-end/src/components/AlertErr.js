@@ -1,29 +1,50 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react';
 import Alert from 'react-bootstrap/Alert';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 
 const AlertErr = ({ errMsg, setErrMsg }) => {
     const [errVisible, setErrVisible] = useState(false);
+    const timeoutRef = useRef(null);
+
     useEffect(() => {
         if (errMsg) {
+            // Clear any existing timeout
+            if (timeoutRef.current) {
+                clearTimeout(timeoutRef.current);
+            }
+
             setErrVisible(true);
-            const timer = setTimeout(() => {
+
+            // Store the timeout reference
+            timeoutRef.current = setTimeout(() => {
                 setErrVisible(false);
-                setErrMsg('');
+                setTimeout(() => {
+                    setErrMsg('');
+                }, 100);
             }, 5000);
-            return () => clearTimeout(timer);
         }
-    }, [errMsg, setErrMsg])
+
+        return () => {
+            if (timeoutRef.current) {
+                clearTimeout(timeoutRef.current);
+            }
+        };
+    }, [errMsg, setErrMsg]);
+
     return (
-        <div className={`errmsg ${errVisible ? "active" : "hide"}`} >
-            <Alert key="warning" variant="danger">
-                <FontAwesomeIcon icon={faInfoCircle} />
-                <span> </span>
-                {errMsg}
-            </Alert>
-        </div>
-    )
-}
+        <>
+            {errMsg && (
+                <div className={`errmsg ${errVisible ? "active" : ""}`}>
+                    <Alert key="warning" variant="danger">
+                        <FontAwesomeIcon icon={faInfoCircle} />
+                        <span> </span>
+                        {errMsg}
+                    </Alert>
+                </div>
+            )}
+        </>
+    );
+};
 
 export default AlertErr;

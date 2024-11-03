@@ -19,7 +19,6 @@ const REGISTER_URL = '/api/v1/auth/register';
 
 const Register = () => {
     const userRef = useRef();
-    const errRef = useRef();
 
     const [isLoading, setIsLoading] = useState(false);
     const [user, setUser] = useState('');
@@ -38,8 +37,6 @@ const Register = () => {
     const [errAlert, setErrAlert] = useState('');
     const [errMsg, setErrMsg] = useState('');
     const [success, setSuccess] = useState('');
-
-    const [errVisible, setErrVisible] = useState(false);
 
     useEffect(() => {
         userRef.current.focus();

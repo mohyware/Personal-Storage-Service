@@ -122,15 +122,22 @@ button {
 }
 
 .errmsg {
-    position: fixed; 
-    top: 10px; 
-    right: 10px; 
-    z-index: 2000; 
-    display: none;
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  z-index: 2000;
+  transition: opacity 150ms ease-in-out;
 }
+
 .errmsg.active {
-    display: block; 
-  }
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.errmsg:not(.active) {
+  opacity: 0;
+  pointer-events: none;
+}
 .successAlert {
     position: fixed; 
     top: 10px; 

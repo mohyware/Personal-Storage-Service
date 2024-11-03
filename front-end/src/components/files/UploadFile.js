@@ -1,12 +1,19 @@
 import React, { useState, useRef } from 'react';
 import { Form, Button, Container, Spinner } from 'react-bootstrap';
 import axios from '../../api/axios';
+import AlertErr from '../AlertErr';
+import { getErrorMessage } from '../../utils/errorHandler';
+
 function UploadFile({ currentFolder, refetchFolderData }) {
     const [file, setFile] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
     const fileInputRef = useRef(null);
+    const [errMsg, setErrMsg] = useState('');
+    const errRef = useRef();
 
     const handleFileChange = (event) => {
+
+
         setFile(event.target.files[0]);
     };
 
@@ -31,53 +38,57 @@ function UploadFile({ currentFolder, refetchFolderData }) {
                 if (fileInputRef.current) {
                     fileInputRef.current.value = "";
                 }
+                setFile(null);
             } catch (err) {
-                console.log(err);
+                const errorMessage = getErrorMessage(err);
+                setErrMsg(errorMessage);
             } finally {
                 setIsLoading(false);
-                setFile(null);
                 refetchFolderData();
             }
         } else {
-            console.log("No file selected");
+            setErrMsg('No file selected');
         }
     };
 
     return (
-        <Container style={{ margin: "0", maxWidth: "360px" }}>
-            <Form onSubmit={handleSubmit} >
-                <Form.Group controlId="formFile" >
-                    <br></br>
-                    <Form.Control
-                        ref={fileInputRef}
-                        type="file"
-                        onChange={handleFileChange}
-                    />
-                </Form.Group>
-                <Button
-                    variant="primary"
-                    type="submit"
-                    className="mt-3"
-                    disabled={!file || isLoading}
-                >
-                    {isLoading ? (
-                        <>
-                            <Spinner
-                                as="span"
-                                animation="border"
-                                size="sm"
-                                role="status"
-                                aria-hidden="true"
-                                className="me-2"
-                            />
-                            Uploading...
-                        </>
-                    ) : (
-                        'Upload'
-                    )}
-                </Button>
-            </Form>
-        </Container>
+        <>
+            <AlertErr errMsg={errMsg} errCall={errRef} setErrMsg={setErrMsg} />
+            <Container style={{ margin: "0", maxWidth: "360px" }}>
+                <Form onSubmit={handleSubmit} >
+                    <Form.Group controlId="formFile" >
+                        <br></br>
+                        <Form.Control
+                            ref={fileInputRef}
+                            type="file"
+                            onChange={handleFileChange}
+                        />
+                    </Form.Group>
+                    <Button
+                        variant="primary"
+                        type="submit"
+                        className="mt-3"
+                        disabled={!file || isLoading}
+                    >
+                        {isLoading ? (
+                            <>
+                                <Spinner
+                                    as="span"
+                                    animation="border"
+                                    size="sm"
+                                    role="status"
+                                    aria-hidden="true"
+                                    className="me-2"
+                                />
+                                Uploading...
+                            </>
+                        ) : (
+                            'Upload'
+                        )}
+                    </Button>
+                </Form>
+            </Container>
+        </>
     );
 }
 

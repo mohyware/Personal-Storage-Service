@@ -8,13 +8,13 @@ const {
     deleteFile,
 } = require('../controllers/file-controller')
 
-const upload = require('../middleware/upload')
+const { upload, handleUploadErrors } = require('../middleware/upload')
 const download = require("../middleware/downloadLocal")
 
 const cloudUpload = require('../utils/cloudinary/cloudinary-upload')
 const cloudDownload = require('../utils/cloudinary/cloudinary-download')
 // in cloud
-router.post('/cloud/upload', upload, cloudUpload, createFile)
+router.post('/cloud/upload', upload, handleUploadErrors, cloudUpload, createFile)
 router.get('/cloud/download/:fileId', cloudDownload)
 // in database
 router.get('/', getUserFiles)

@@ -6,14 +6,16 @@ export const getErrorMessage = (err, customMessages = {}) => {
             return customMessages[status];
         }
 
+        if (status === 404) {
+            return 'The requested resource was not found. Please check the URL and try again.';
+        }
         if (status === 429) {
             return 'Too many requests. Please try again later.';
         }
         if (status === 500) {
             return 'Internal Server Error: Something went wrong on our Server. Please try again later.';
         }
-
-        return `Error ${status}: ${err.response.data?.message || 'An error occurred.'}`;
+        return `Error ${status}: ${err.response.data?.msg || 'An error occurred.'}`;
     } else if (err.request) {
         return 'No response received from the server. Please check your network connection.';
     } else if (err.message) {

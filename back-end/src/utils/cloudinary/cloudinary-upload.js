@@ -35,8 +35,8 @@ const cloudUpload = async (req, res, next) => {
             public_id: final.public_id,
         };
         next();
-    } catch (error) {
-        next(error);
+    } catch (err) {
+        next(err);
     }
 };
 

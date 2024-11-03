@@ -22,7 +22,7 @@ const deleteUser = async (req, res, next) => {
     try {
         const user = await User.findUnique({ where: { id: userId } });
         if (user.email === 'example@gmail.com') {
-            throw new BadRequestError(`Come on i made for everyone to test the app don't be like that`)
+            throw new BadRequestError(`Come on i made it for everyone to test the app don't be like that`)
         }
         await User.delete({ where: { id: userId } });
         res.status(StatusCodes.OK).json({ message: "User deleted successfully" })

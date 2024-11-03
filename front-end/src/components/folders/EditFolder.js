@@ -36,7 +36,7 @@ function EditFolder(props) {
 
             <Modal show={show} onHide={handleClose}>
                 <Modal.Header closeButton>
-                    <Modal.Title>Add New Folder</Modal.Title>
+                    <Modal.Title>Edit Folder</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <Form>

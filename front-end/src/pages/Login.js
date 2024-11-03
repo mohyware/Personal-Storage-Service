@@ -2,17 +2,15 @@ import { useRef, useState, useEffect } from 'react';
 import './style.css'
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
-import Alert from 'react-bootstrap/Alert';
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faInfoCircle } from "@fortawesome/free-solid-svg-icons";
 import CenteredContainer from "../components/CenteredContainer"
+import { getErrorMessage } from '../utils/errorHandler';
+import AlertErr from '../components/AlertErr';
 
 import axios from '../api/axios';
 const LOGIN_URL = '/api/v1/auth/login';
 
 const Login = () => {
     const userRef = useRef();
-    const errRef = useRef();
 
     const navigate = useNavigate();
     const location = useLocation();
@@ -21,15 +19,10 @@ const Login = () => {
     const [email, setEmail] = useState('');
     const [pwd, setPwd] = useState('');
     const [errMsg, setErrMsg] = useState('');
-    const [errVisible, setErrVisible] = useState(false);
 
     useEffect(() => {
         userRef.current.focus();
     }, [])
-
-    useEffect(() => {
-        setErrMsg('');
-    }, [email, pwd])
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -46,37 +39,20 @@ const Login = () => {
             setPwd('');
             navigate(from, { replace: true });
         } catch (err) {
-            if (!err?.response) {
-                setErrMsg('No Server Response');
-            } else if (err.response?.status === 400) {
-                setErrMsg('Missing Username or Password');
-            } else if (err.response?.status === 401) {
-                setErrMsg('Oops! Your email and password don’t match')
-            } else if (err.response?.status === 429) {
-                setErrMsg('Too many login attempts');
-            } else {
-                setErrMsg(`Something went wrong on our end. Please try again later`);
-            }
-            setErrVisible(true);
-            const timer = setTimeout(() => {
-                setErrVisible(false);
-            }, 2000);
-            return () => clearTimeout(timer);
-
+            const customMessages = {
+                400: 'Missing Username or Password',
+                401: 'Oops! Your email and password don’t match',
+                429: 'Too many login attempts. Please try again later'
+            };
+            const errorMessage = getErrorMessage(err, customMessages);
+            setErrMsg(errorMessage);
         }
     }
 
     return (
         <CenteredContainer>
-
+            <AlertErr errMsg={errMsg} setErrMsg={setErrMsg} />
             <section>
-                <div ref={errRef} className={`errmsg ${errVisible ? "active" : "hide"}`} >
-                    <Alert key="warning" variant="danger">
-                        <FontAwesomeIcon icon={faInfoCircle} />
-                        <span> </span>
-                        {errMsg}
-                    </Alert>
-                </div>
                 <h1>Sign In</h1>
                 <form onSubmit={handleSubmit}>
                     <label htmlFor="email">Email:</label>

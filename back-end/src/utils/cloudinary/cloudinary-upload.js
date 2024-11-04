@@ -29,7 +29,7 @@ const cloudUpload = async (req, res, next) => {
         // Wait for the upload to complete
         const final = await uploadPromise;
 
-        req.body.public_id = final.public_id;
+        req.body.public_id = final.url;
         res.locals.customData = {
             message: "uploaded to cloudinary successfully",
             public_id: final.public_id,

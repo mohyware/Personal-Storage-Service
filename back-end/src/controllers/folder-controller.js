@@ -103,15 +103,51 @@ const updateFolder = async (req, res, next) => {
     }
 };
 
-const deleteFolder = async (req, res) => {
+const deleteFolder = async (req, res, err) => {
     const { folderId: folderId } = req.params;
+    try {
 
-    await Folder.delete({
-        where: { id: Number(folderId) },
+        deleteFolderAndContents(folderId)
+        /*     await Folder.delete({
+            where: { id: Number(folderId) },
+            }); */
+
+        res.status(StatusCodes.OK).json({ message: "Folder deleted successfully" });
+    } catch (err) {
+        next(err);
+    }
+};
+
+async function deleteFolderAndContents(id) {
+    const folderId = parseInt(id, 10);
+    // Find all subfolders recursively
+    const folder = await prisma.folder.findUnique({
+        where: { id: folderId },
+        include: {
+            files: true,
+            subFolders: true,
+        },
     });
 
-    res.status(StatusCodes.OK).json({ message: "Folder deleted successfully" });
-};
+    if (!folder) {
+        throw new BadRequestError(`Folder with ID ${folderId} not found.`);
+    }
+
+    // Delete all files in the folder
+    await prisma.file.deleteMany({
+        where: { folderId: folder.id },
+    });
+
+    // Recursively delete each subfolder
+    for (const subFolder of folder.subFolders) {
+        await deleteFolderAndContents(subFolder.id);
+    }
+
+    // Delete the folder itself
+    await prisma.folder.delete({
+        where: { id: folder.id },
+    });
+}
 
 module.exports = {
     getUserFolders,

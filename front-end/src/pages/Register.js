@@ -83,7 +83,6 @@ const Register = () => {
             setPwd('');
             setEmail('');
         } catch (err) {
-            console.log(errAlert)
             const errorMessage = getErrorMessage(err);
             setErrAlert(errorMessage);
         } finally {

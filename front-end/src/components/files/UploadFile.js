@@ -37,13 +37,13 @@ function UploadFile({ currentFolder, refetchFolderData }) {
                 if (fileInputRef.current) {
                     fileInputRef.current.value = "";
                 }
+                await refetchFolderData();
                 setFile(null);
             } catch (err) {
                 const errorMessage = getErrorMessage(err);
                 setErrMsg(errorMessage);
             } finally {
                 setIsLoading(false);
-                refetchFolderData();
             }
         } else {
             setErrMsg('No file selected');

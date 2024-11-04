@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import Button from 'react-bootstrap/Button';
+import { Button, Spinner } from 'react-bootstrap';
 import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
 import axios from '../../api/axios'; import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
@@ -13,9 +13,12 @@ function EditFolder(props) {
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
     const [folder, setFolder] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setIsLoading(true);
+
         try {
             await axios.patch(`/api/v1/folder/${props.FolderId}`,
                 JSON.stringify({ name: folder, parentFolderId: props.ParentFolderId }),
@@ -24,14 +27,22 @@ function EditFolder(props) {
                     withCredentials: true
                 }
             );
-            props.refetchFolderData();
+            await props.refetchFolderData();
             setFolder('')
         } catch (err) {
             handleClose();
             const errorMessage = getErrorMessage(err);
             setErrMsg(errorMessage);
+        } finally {
+            setIsLoading(false);
+            handleClose();
         }
-        handleClose();
+    }
+    const handleKeyDown = (e) => {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            handleSubmit(e);
+        }
     }
     return (
         <>
@@ -54,6 +65,7 @@ function EditFolder(props) {
                                 autoFocus
                                 onChange={(e) => setFolder(e.target.value)}
                                 value={folder}
+                                onKeyDown={handleKeyDown}
                             />
                         </Form.Group>
                     </Form>
@@ -62,8 +74,24 @@ function EditFolder(props) {
                     <Button variant="secondary" onClick={handleClose}>
                         Close
                     </Button>
-                    <Button variant="success" onClick={handleSubmit} >
-                        Submit
+                    <Button variant="success" onClick={handleSubmit}
+                        disabled={isLoading}
+                    >
+                        {isLoading ? (
+                            <>
+                                <Spinner
+                                    as="span"
+                                    animation="border"
+                                    size="sm"
+                                    role="status"
+                                    aria-hidden="true"
+                                    className="me-2"
+                                />
+                                Renaming...
+                            </>
+                        ) : (
+                            'Rename'
+                        )}
                     </Button>
                 </Modal.Footer>
             </Modal>

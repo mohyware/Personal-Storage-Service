@@ -1,12 +1,13 @@
 import { useState } from 'react';
-import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import axios from '../../api/axios'; import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import AlertErr from '../AlertErr';
 import { getErrorMessage } from '../../utils/errorHandler';
+import { Button, Spinner } from 'react-bootstrap';
 
 function DeleteFile(props) {
+    const [isLoading, setIsLoading] = useState(false);
     const [show, setShow] = useState(false);
     const [errMsg, setErrMsg] = useState('');
 
@@ -15,15 +16,19 @@ function DeleteFile(props) {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setIsLoading(true);
         try {
             await axios.delete(`/api/v1/file/${props.fileId}`);
+            await props.refetchFolderData();
         } catch (err) {
             handleClose();
             const errorMessage = getErrorMessage(err);
             setErrMsg(errorMessage);
         }
-        props.refetchFolderData();
-        handleClose();
+        finally {
+            setIsLoading(false);
+            handleClose();
+        }
     }
     return (
         <>
@@ -43,8 +48,24 @@ function DeleteFile(props) {
                     <Button variant="secondary" onClick={handleClose}>
                         Close
                     </Button>
-                    <Button variant="danger" onClick={handleSubmit}>
-                        Delete
+                    <Button variant="danger" onClick={handleSubmit}
+                        disabled={isLoading}
+                    >
+                        {isLoading ? (
+                            <>
+                                <Spinner
+                                    as="span"
+                                    animation="border"
+                                    size="sm"
+                                    role="status"
+                                    aria-hidden="true"
+                                    className="me-2"
+                                />
+                                Deleting...
+                            </>
+                        ) : (
+                            'Delete'
+                        )}
                     </Button>
                 </Modal.Footer>
             </Modal>

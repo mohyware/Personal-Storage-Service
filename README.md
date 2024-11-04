@@ -4,6 +4,7 @@ Welcome to my first fullstack application built using the PERN stack! This appli
 ## Table of Contents
 
 - [Features](#features)
+- [Testing the Deployment](#testing-the-deployment)
 - [Technologies Used](#technologies-used)
 - [Installation](#installation)
 - [Usage](#usage)
@@ -11,6 +12,11 @@ Welcome to my first fullstack application built using the PERN stack! This appli
 - [Error Handling](#error-handling)
 - [License](#license)
 
+## Testing the Deployment
+Registered account for lazy ones:
+
+- **Email:** example@gmail.com
+- **Password:** 1e#uyjG%4
 ## Features
 
 - **Image Storage:** Upload and store images.

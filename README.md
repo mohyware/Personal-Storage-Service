@@ -38,8 +38,8 @@ Registered account for lazy ones:
 To get started with this project, follow these steps:
 1. Clone the repository:
 ```bash
-git clone <repository-url>
-cd <repository-name>
+git clone https://github.com/mohyware/Personal-Storage-Service
+cd Personal-Storage-Service
 ```
 2. Install the dependencies for both back-end and front-end:
 npm install

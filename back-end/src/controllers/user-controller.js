@@ -24,9 +24,15 @@ const deleteUser = async (req, res, next) => {
         if (user.email === 'example@gmail.com') {
             throw new BadRequestError(`Come on i made it for everyone to test the app don't be like that`)
         }
-        await User.delete({ where: { id: userId } });
+        // soft delete
+        await User.update({
+            where: { id: userId },
+            data: { deleted: true },
+        });
+        //await User.delete({ where: { id: userId } });
         res.status(StatusCodes.OK).json({ message: "User deleted successfully" })
     } catch (err) {
+        console.log(err)
         next(err);
     }
 

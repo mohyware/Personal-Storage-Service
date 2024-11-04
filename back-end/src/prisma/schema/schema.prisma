@@ -21,6 +21,7 @@ model User {
   password  String
   files     File[]
   folders   Folder[]
+  deleted   Boolean  @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -31,9 +32,9 @@ model File {
   size      Int //  in bytes
   mimeType  String // Type of the file (e.g., image/jpeg, application/pdf)
   url       String // URL or path where the file is stored
-  user      User     @relation(fields: [userId], references: [id])
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId    Int // Foreign key to User model
-  folder    Folder?  @relation(fields: [folderId], references: [id])
+  folder    Folder?  @relation(fields: [folderId], references: [id], onDelete: Cascade)
   folderId  Int? // Optional foreign key to Folder
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

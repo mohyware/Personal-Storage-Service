@@ -30,7 +30,7 @@ const login = async (req, res, next) => {
         if (!email || !password) {
             throw new BadRequestError('Please provide email and password')
         }
-        const user = await User.findUnique({ where: { email: email } })
+        const user = await User.findUnique({ where: { email: email, deleted: false } })
         if (!user) {
             throw new UnauthenticatedError('Invalid Credentials')
         }

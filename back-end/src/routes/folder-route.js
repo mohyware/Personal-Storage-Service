@@ -7,11 +7,12 @@ const {
     updateFolder,
     deleteFolder,
 } = require('../controllers/folder-controller')
+const { nameValidator } = require('../validations/validate')
 
-router.post('/', createFolder)
+router.post('/', nameValidator, createFolder)
 router.get('/', getUserFolders)
 router.get('/:folderId', getFolderById)
-router.patch('/:folderId', updateFolder);
+router.patch('/:folderId', nameValidator, updateFolder);
 router.delete('/:folderId', deleteFolder)
 
 module.exports = router

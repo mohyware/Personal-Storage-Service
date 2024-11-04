@@ -43,7 +43,6 @@ const Login = () => {
             navigate(from, { replace: true });
         } catch (err) {
             const customMessages = {
-                400: 'Missing Username or Password',
                 401: 'Oops! Your email and password don’t match',
                 429: 'Too many login attempts. Please try again later'
             };

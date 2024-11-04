@@ -3,12 +3,19 @@ const { BadRequestError, UnauthenticatedError } = require('../errors')
 const prisma = require("../config/prisma-client")
 const createJWT = require('../utils/jwt-utils');
 const { hashPassword, comparePassword } = require('../utils/password-utils');
-
+const { validationResult } = require('express-validator')
 const User = prisma.user;
 
 const register = async (req, res, next) => {
     const { email, userName, password } = req.body
     try {
+        const errors = validationResult(req)
+        if (!errors.isEmpty()) {
+            const extractedErrors = errors.array().map(err => err.msg);
+            const uniqueErrors = [...new Set(extractedErrors)];
+            const errorMessage = `Validation failed. Please correct the following issues: ${uniqueErrors.join(', ')}.`;
+            throw new BadRequestError(errorMessage);
+        }
         const hashedPassword = await hashPassword(password);
         const user = await User.create({
             data: {
@@ -27,8 +34,12 @@ const register = async (req, res, next) => {
 const login = async (req, res, next) => {
     const { email, password } = req.body
     try {
-        if (!email || !password) {
-            throw new BadRequestError('Please provide email and password')
+        const errors = validationResult(req)
+        if (!errors.isEmpty()) {
+            const extractedErrors = errors.array().map(err => err.msg);
+            const uniqueErrors = [...new Set(extractedErrors)];
+            const errorMessage = `Validation failed. Please correct the following issues: ${uniqueErrors.join(', ')}.`;
+            throw new BadRequestError(errorMessage);
         }
         const user = await User.findUnique({ where: { email: email, deleted: false } })
         if (!user) {

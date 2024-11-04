@@ -1,6 +1,7 @@
 const prisma = require("../config/prisma-client");
 const { StatusCodes } = require('http-status-codes');
 const { BadRequestError } = require('../errors');
+const { validationResult } = require('express-validator')
 
 const Folder = prisma.folder;
 
@@ -46,9 +47,12 @@ const createFolder = async (req, res, next) => {
     } = req;
 
     try {
-
-        if (!name) {
-            throw new BadRequestError("Folder name is required");
+        const errors = validationResult(req)
+        if (!errors.isEmpty()) {
+            const extractedErrors = errors.array().map(err => err.msg);
+            const uniqueErrors = [...new Set(extractedErrors)];
+            const errorMessage = `Validation failed. Please correct the following issues: ${uniqueErrors.join(', ')}.`;
+            throw new BadRequestError(errorMessage);
         }
 
         const folder = await Folder.create({
@@ -69,9 +73,12 @@ const updateFolder = async (req, res, next) => {
     const { folderId: folderId } = req.params;
     const { name, parentFolderId } = req.body;
     try {
-        // check name is not empty
-        if (!name) {
-            throw new BadRequestError("no name was provided");
+        const errors = validationResult(req)
+        if (!errors.isEmpty()) {
+            const extractedErrors = errors.array().map(err => err.msg);
+            const uniqueErrors = [...new Set(extractedErrors)];
+            const errorMessage = `Validation failed. Please correct the following issues: ${uniqueErrors.join(', ')}.`;
+            throw new BadRequestError(errorMessage);
         }
         // check folder exist or not
         const oldFolder = await Folder.findUnique({ where: { id: Number(folderId) } });
@@ -106,7 +113,7 @@ const updateFolder = async (req, res, next) => {
 const deleteFolder = async (req, res, err) => {
     const { folderId: folderId } = req.params;
     try {
-
+        // recursively deletion for it and its content
         await deleteFolderAndContents(folderId)
         /*     await Folder.delete({
             where: { id: Number(folderId) },

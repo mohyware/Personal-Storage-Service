@@ -7,6 +7,7 @@ const {
     updateFile,
     deleteFile,
 } = require('../controllers/file-controller')
+const { nameValidator } = require('../validations/validate')
 
 const { upload, handleUploadErrors } = require('../middleware/upload')
 const download = require("../middleware/downloadLocal")
@@ -14,12 +15,12 @@ const download = require("../middleware/downloadLocal")
 const cloudUpload = require('../utils/cloudinary/cloudinary-upload')
 const cloudDownload = require('../utils/cloudinary/cloudinary-download')
 // in cloud
-router.post('/cloud/upload', upload, handleUploadErrors, cloudUpload, createFile)
+router.post('/cloud/upload', upload, handleUploadErrors, nameValidator, cloudUpload, createFile)
 router.get('/cloud/download/:fileId', cloudDownload)
 // in database
 router.get('/', getUserFiles)
 router.get('/:fileId', getFileById)
-router.patch('/:fileId', updateFile);
+router.patch('/:fileId', nameValidator, updateFile);
 router.delete('/:fileId', deleteFile)
 // for local
 //router.post('/local/upload', upload, createFile)

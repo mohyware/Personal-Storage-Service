@@ -1,6 +1,7 @@
 const prisma = require("../config/prisma-client");
 const { StatusCodes } = require('http-status-codes');
 const { BadRequestError, NotFoundError } = require('../errors');
+const { validationResult } = require('express-validator')
 
 const File = prisma.file;
 const Folder = prisma.folder;
@@ -50,6 +51,13 @@ const createFile = async (req, res, next) => {
     } = req;
 
     try {
+        const errors = validationResult(req)
+        if (!errors.isEmpty()) {
+            const extractedErrors = errors.array().map(err => err.msg);
+            const uniqueErrors = [...new Set(extractedErrors)];
+            const errorMessage = `Validation failed. Please correct the following issues: ${uniqueErrors.join(', ')}.`;
+            throw new BadRequestError(errorMessage);
+        }
         // check if there is passed id then if there is Folder exist with this id
         if (!folderId) {
             const folder = await Folder.findUnique({ where: { id: Number(folderId) } });
@@ -86,9 +94,12 @@ const updateFile = async (req, res, next) => {
     const { fileId } = req.params;
     const { name, folderId } = req.body;
     try {
-        // check name is not empty
-        if (!name) {
-            throw new BadRequestError("no name was provided");
+        const errors = validationResult(req)
+        if (!errors.isEmpty()) {
+            const extractedErrors = errors.array().map(err => err.msg);
+            const uniqueErrors = [...new Set(extractedErrors)];
+            const errorMessage = `Validation failed. Please correct the following issues: ${uniqueErrors.join(', ')}.`;
+            throw new BadRequestError(errorMessage);
         }
         // check file exist or not
         const oldFile = await File.findUnique({ where: { id: Number(fileId) } });

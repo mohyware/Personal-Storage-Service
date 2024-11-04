@@ -2,6 +2,7 @@ require("dotenv").config();
 const express = require('express')
 const app = express()
 const cookieParser = require('cookie-parser');
+const morgan = require('morgan')
 
 // middleware
 const auth = require('./middleware/auth')
@@ -28,6 +29,8 @@ const limiter = rateLimit({
     max: 100 // Limit each IP to 100 requests per windowMs
 });
 app.use(limiter);
+// logging
+app.use(morgan('tiny'));
 // security
 const helmet = require('helmet');
 app.use(helmet());

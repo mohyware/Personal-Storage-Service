@@ -8,9 +8,10 @@ const {
 } = require('../controllers/auth-controller')
 const auth = require('../middleware/auth')
 const loginLimiter = require('../middleware/login-limiter')
+const { registerValidator, loginValidator } = require('../validations/validate')
 
-router.post('/register', loginLimiter, register)
-router.post('/login', loginLimiter, login)
+router.post('/register', loginLimiter, registerValidator, register)
+router.post('/login', loginLimiter, loginValidator, login)
 router.get('/status', auth, getStatus)
 router.delete('/logout', auth, logout);
 

@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react'
 
 function AlertWelcome({ showAlert, setAlert }) {
     const [msgVisible, setMsgVisible] = useState(false);
-    console.log(showAlert)
     useEffect(() => {
         if (showAlert) {
             setMsgVisible(true);

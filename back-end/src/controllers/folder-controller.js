@@ -107,7 +107,7 @@ const deleteFolder = async (req, res, err) => {
     const { folderId: folderId } = req.params;
     try {
 
-        deleteFolderAndContents(folderId)
+        await deleteFolderAndContents(folderId)
         /*     await Folder.delete({
             where: { id: Number(folderId) },
             }); */

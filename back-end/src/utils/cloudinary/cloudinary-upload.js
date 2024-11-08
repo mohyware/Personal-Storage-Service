@@ -32,7 +32,7 @@ const cloudUpload = async (req, res, next) => {
         req.body.public_id = final.url;
         res.locals.customData = {
             message: "uploaded to cloudinary successfully",
-            public_id: final.public_id,
+            public_id: final.url,
         };
         next();
     } catch (err) {
